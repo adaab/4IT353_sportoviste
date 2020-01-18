@@ -1,0 +1,22 @@
+.loginWindow{
+    -fx-background-color: gray;
+    -fx-border-radius: 15px;
+    -fx-border-color: darkblue;
+    -fx-border-width: 2px;
+}
+
+.button{
+    -fx-background-color: darkblue;
+    -fx-text-fill: white;
+    -fx-pref-height: 20px;
+    -fx-pref-width: 120px;
+}
+
+.label{
+    -fx-text-fill: darkblue;
+    -fx-font-weight: bold;
+}
+
+.background{
+    -fx-background-color: white;
+}
