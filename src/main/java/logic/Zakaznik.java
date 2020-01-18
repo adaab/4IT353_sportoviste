@@ -10,11 +10,13 @@ import javax.persistence.Table;
 public class Zakaznik {
     @Id
     @Column(name="idZakaznik")
-    public Integer idZakaznik;
+    private Integer idZakaznik;
     @Column(name="heslo")
-    public String heslo;
+    private String heslo;
     @Column(name="email")
-    public String email;
+    private String email;
+    @Column(name="jeAdmin")
+    private Boolean jeAdmin;
 
     public Zakaznik(){
     }
@@ -47,5 +49,13 @@ public class Zakaznik {
 
     public void setHeslo(String heslo) {
         this.heslo = heslo;
+    }
+
+    public Boolean getAdmin() {
+        return jeAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        jeAdmin = admin;
     }
 }

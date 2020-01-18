@@ -20,3 +20,11 @@
 .background{
     -fx-background-color: white;
 }
+
+.dialogPane{
+
+}
+
+.warningLabel{
+    -fx-text-fill: red;
+}
