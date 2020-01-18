@@ -2,6 +2,7 @@ package UI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import logic.App;
 import logic.Observer;
 
@@ -20,6 +21,12 @@ public class LoginController implements Observer {
     public Label chyba;
     @FXML
     public CheckBox administrator;
+    @FXML
+    public GridPane loginPane;
+    @FXML
+    public GridPane signinPane;
+    @FXML
+    public PasswordField hesloKontrola;
 
     @Override
     public void update() {
@@ -55,5 +62,21 @@ public class LoginController implements Observer {
         }
     }
 
-    public void novaRegistrace(){}
+    public void novaRegistrace(){
+        loginPane.setVisible(false);
+        signinPane.setVisible(true);
+    }
+
+    public void zaregistrovat(){
+        String emailUzivatele = jmeno.getText();
+        String hesloUzivatele = heslo.getText();
+        String hesloUzivateleKontrola = hesloKontrola.getText();
+
+        if(app.zaregistrujZakaznika(emailUzivatele, hesloUzivatele, hesloUzivateleKontrola)){
+            app.initCommonScreen();
+        } else {
+            chyba.setVisible(true);
+            chyba.setText("Uživatel již existuje, nebo se neshodují hesla.");
+        }
+    }
 }
