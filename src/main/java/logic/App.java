@@ -9,10 +9,11 @@ import java.util.List;
 public class App implements Subject{
     public ArrayList<RozvrhovaAkce> akce;
     public EntityManagerFactory EMF;
+    private int pocetZakazniku;
 
     public App() {
         EMF = Persistence.createEntityManagerFactory("punit");
-
+        getPocetZakazniku();
     }
 
     @Override
@@ -39,11 +40,12 @@ public class App implements Subject{
             String heslo = em.createQuery("select heslo from Zakaznik where email = :emailUzivatele", String.class).setParameter("emailUzivatele", emailUzivatele).getSingleResult();
             if(jeAdmin){
                 Boolean admin = em.createQuery("select jeAdmin from Zakaznik where email = :emailUzivatele", Boolean.class).setParameter("emailUzivatele", emailUzivatele).getSingleResult();
-                jeOK = admin.equals(jeAdmin) && heslo.equals(hesloUzivatele);
+                jeOK = admin.equals(jeAdmin) && heslo.equals(hashujHeslo(hesloUzivatele));
             } else {
-                jeOK = heslo.equals(hesloUzivatele);
+                jeOK = heslo.equals(hashujHeslo(hesloUzivatele));
             }
         } catch (NoResultException e){
+            System.out.println(e);
             return false;
         }
 
@@ -69,7 +71,7 @@ public class App implements Subject{
                 em.getTransaction().begin();
 
                 Zakaznik novy = new Zakaznik();
-                novy.setIdZakaznik(1);
+                novy.setIdZakaznik(pocetZakazniku+1);
                 novy.setEmail(email);
                 novy.setHeslo(hashujHeslo(heslo));
                 novy.setAdmin(false);
@@ -78,6 +80,7 @@ public class App implements Subject{
                 em.getTransaction().commit();
                 em.close();
 
+                pocetZakazniku++;
                 return true;
             }
         }
@@ -112,6 +115,13 @@ public class App implements Subject{
         }
 
         return hesloHash;
+    }
+
+    public void getPocetZakazniku(){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        pocetZakazniku = em.createQuery("select count(idZakaznik) from Zakaznik", Long.class).getSingleResult().intValue();
     }
 
 }
