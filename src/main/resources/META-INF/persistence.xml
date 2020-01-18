@@ -1,0 +1,48 @@
+<!--persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="punit">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>logic.Zakaznik</class>
+        <class>logic.Trener</class>
+        <class>logic.Sportoviste</class>
+        <class>logic.RozvrhovaAkce</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:sqlserver://ada.database.windows.net:1433;database=SportovisteDB;user=ada@ada;password={76r0dntV};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;" />
+
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="divadlo" />
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+            <property name="hibernate.show_sql" value="true" />
+        </properties>
+    </persistence-unit>
+
+</persistence-->
+
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="punit">
+        <class>logic.Zakaznik</class>
+        <class>logic.Trener</class>
+        <class>logic.Sportoviste</class>
+        <class>logic.RozvrhovaAkce</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+            <property name="javax.persistence.jdbc.url"    value="jdbc:sqlserver://ada.database.windows.net:1433;database=SportovisteDB" />
+            <property name="javax.persistence.jdbc.user" value="ada" />
+            <property name="javax.persistence.jdbc.password" value="76r0dntV" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="show_sql" value="true"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

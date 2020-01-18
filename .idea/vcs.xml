@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/4IT353_Lode" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Klient" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Lode" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adv-vencovsky" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura-cv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura-cv-venc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura-cv2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura-vencovsky" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura-vencovsky/adventura-cv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/adventura2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bara15-adventura-sem" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/divadlo2" vcs="Git" />
+  </component>
+</project>
