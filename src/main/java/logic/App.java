@@ -31,6 +31,7 @@ public class App implements Subject{
 
         EMF = Persistence.createEntityManagerFactory("punit");
         getPocetZakazniku();
+        pocetSportovist = getSportoviste().size();
     }
 
     @Override
@@ -155,7 +156,6 @@ public class App implements Subject{
 
         List<Sportoviste> sportoviste = em.createQuery("select s from Sportoviste s",Sportoviste.class).getResultList();
 
-        pocetSportovist = sportoviste.size();
         return sportoviste;
     }
 

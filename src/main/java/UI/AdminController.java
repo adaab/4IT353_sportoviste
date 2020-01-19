@@ -3,20 +3,21 @@ package UI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import logic.App;
 import logic.Observer;
 import logic.Sportoviste;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AdminController implements Observer {
     private App app;
     private ObservableList<String> sportoviste;
 
     private Boolean pridavamNovouPolozku = false;
+    private Boolean upravujuPolozku = false;
+    private Boolean zobrazujuPolozku = false;
     private Sportoviste aktualni;
 
     @FXML
@@ -39,6 +40,8 @@ public class AdminController implements Observer {
     public TextField povrchSportoviste;
     @FXML
     public TextField rozmerySportoviste;
+    @FXML
+    public DialogPane popupSportoviste;
 
     @Override
     public void update() {
@@ -47,6 +50,8 @@ public class AdminController implements Observer {
         app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
         seznamSportoviste.setItems(sportoviste);
 
+        zobrazujuPolozku = false;
+        upravujuPolozku = false;
         pridavamNovouPolozku = false;
         aktualni = null;
         idSportoviste.clear();
@@ -56,6 +61,7 @@ public class AdminController implements Observer {
 
         ulozitSportoviste.setDisable(true);
         zrusitSportoviste.setDisable(true);
+        novaPolozkaSportoviste.setDisable(false);
     }
 
     public void inicializuj(App app){
@@ -64,7 +70,32 @@ public class AdminController implements Observer {
         update();
     }
 
-    public void novaPolozkaSportoviste(){
+    public Boolean getConfirmationPopup(String typ){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        if(typ.equals("smazat")) {
+            alert.setTitle("Smazat záznam");
+            alert.setContentText("Chystáte se nenávratně smazat zvolený záznam. Chcete pokračovat?");
+        } else {
+            alert.setTitle("Zrušit změny");
+            alert.setContentText("Neuložené změny budou ztraceny. Chcete pokračovat?");
+        }
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return ((result.isPresent() && (result.get() == ButtonType.OK)));
+    }
+
+    public void novaPolozkaSportoviste() {
+        if (upravujuPolozku || pridavamNovouPolozku) {
+            if (!getConfirmationPopup("zrusit")) {
+                return;
+            }
+        }
+
+        if (zobrazujuPolozku) {
+            update();
+        }
+
         pridavamNovouPolozku = true;
         aktualni = null;
 
@@ -82,6 +113,7 @@ public class AdminController implements Observer {
 
         upravitSportoviste.setDisable(true);
         smazatSportoviste.setDisable(true);
+
     }
 
     public void ulozitSportoviste() {
@@ -101,6 +133,12 @@ public class AdminController implements Observer {
     }
 
     public void vyberSportoviste(){
+        if(upravujuPolozku || pridavamNovouPolozku){
+            if(!getConfirmationPopup("zrusit")){
+                return;
+            }
+        }
+
         String volba = String.valueOf(seznamSportoviste.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
@@ -118,9 +156,12 @@ public class AdminController implements Observer {
         upravitSportoviste.setDisable(false);
         smazatSportoviste.setDisable(false);
         novaPolozkaSportoviste.setDisable(false);
+
+        zobrazujuPolozku = true;
     }
 
     public void upravSportoviste(){
+        upravujuPolozku = true;
         nazevSportoviste.setDisable(false);
         povrchSportoviste.setDisable(false);
         rozmerySportoviste.setDisable(false);
@@ -133,16 +174,16 @@ public class AdminController implements Observer {
     }
 
     public void smazSportoviste(){
-        //TODO init confirmation popup
-        app.removeSportoviste(aktualni.getIdSportoviste());
-        update();
+        if(getConfirmationPopup("smazat")){
+            app.removeSportoviste(aktualni.getIdSportoviste());
+            update();
+        }
     }
 
     public void zrusitSportoviste(){
-        //TODO init confirmation popup
-        update();
+        if(getConfirmationPopup("zrusit")){
+            update();
+        }
     }
-
-
 
 }
