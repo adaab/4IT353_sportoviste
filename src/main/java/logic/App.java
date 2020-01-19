@@ -1,6 +1,15 @@
 package logic;
 
+import UI.AdminController;
+import UI.LoginController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import javax.persistence.*;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -10,8 +19,16 @@ public class App implements Subject{
     public ArrayList<RozvrhovaAkce> akce;
     public EntityManagerFactory EMF;
     private int pocetZakazniku;
+    private int pocetSportovist;
 
-    public App() {
+    private Stage stage;
+    private LoginController loginController;
+    private AdminController adminController;
+
+    public App(LoginController controller, Stage stage) {
+        this.loginController = controller;
+        this.stage = stage;
+
         EMF = Persistence.createEntityManagerFactory("punit");
         getPocetZakazniku();
     }
@@ -52,8 +69,16 @@ public class App implements Subject{
         return jeOK;
     }
 
-    public void initAdminScreen(){
-
+    public void initAdminScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/admin.fxml"));
+        TabPane root = loader.load();
+        adminController = loader.getController();
+        Scene scene = new Scene(root, 800, 640);
+        stage.setScene(scene);
+        stage.setTitle("Sportoviště - administrátor");
+        scene.getStylesheets().add("styles.css");
+        adminController.inicializuj(this);
     }
 
     public void initCommonScreen(){
@@ -124,4 +149,42 @@ public class App implements Subject{
         pocetZakazniku = em.createQuery("select count(idZakaznik) from Zakaznik", Long.class).getSingleResult().intValue();
     }
 
+    public List<Sportoviste> getSportoviste(){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        List<Sportoviste> sportoviste = em.createQuery("select s from Sportoviste s",Sportoviste.class).getResultList();
+
+        pocetSportovist = sportoviste.size();
+        return sportoviste;
+    }
+
+    public void noveSportoviste(String nazev, String povrch, String rozmery){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Sportoviste novy = new Sportoviste();
+        novy.setIdSportoviste(pocetSportovist+1);
+        novy.setNazev(nazev);
+        novy.setPovrch(povrch);
+        novy.setRozmery(rozmery);
+
+        em.merge(novy);
+        em.getTransaction().commit();
+        em.close();
+
+        pocetSportovist++;
+    }
+
+    public Sportoviste getSportovisteDetail(Integer id){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id",Sportoviste.class).setParameter("id",id).getSingleResult();
+
+        em.getTransaction().commit();
+        em.close();
+
+        return sportoviste;
+    }
 }

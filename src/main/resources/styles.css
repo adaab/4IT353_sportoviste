@@ -12,7 +12,7 @@
     -fx-pref-width: 120px;
 }
 
-.label{
+.labelBig{
     -fx-text-fill: darkblue;
     -fx-font-weight: bold;
 }
@@ -28,3 +28,5 @@
 .warningLabel{
     -fx-text-fill: red;
 }
+
+.labelSmall{}

@@ -1,9 +1,21 @@
 package logic;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Sportoviste")
 public class Sportoviste {
+    @Id
+    @Column(name="idSportoviste")
     public Integer idSportoviste;
+    @Column(name="nazev")
     public String nazev;
+    @Column(name="povrch")
     public String povrch;
+    @Column(name="rozmery")
     public String rozmery;
 
     public Sportoviste(Integer idSportoviste, String nazev, String povrch, String rozmery) {
@@ -11,6 +23,9 @@ public class Sportoviste {
         this.nazev = nazev;
         this.povrch = povrch;
         this.rozmery = rozmery;
+    }
+
+    public Sportoviste() {
     }
 
     public Integer getIdSportoviste() {

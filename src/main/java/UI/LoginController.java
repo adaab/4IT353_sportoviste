@@ -6,6 +6,8 @@ import javafx.scene.layout.GridPane;
 import logic.App;
 import logic.Observer;
 
+import java.io.IOException;
+
 public class LoginController implements Observer {
     public App app;
 
@@ -38,7 +40,7 @@ public class LoginController implements Observer {
         update();
     }
 
-    public void vstoupit(){
+    public void vstoupit() throws IOException {
         String emailUzivatele = jmeno.getText();
         String hesloUzivatele = heslo.getText();
         Boolean jeAdmin = administrator.isSelected();

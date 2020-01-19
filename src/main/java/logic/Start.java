@@ -67,7 +67,7 @@ public class Start extends Application {
         scene.getStylesheets().add("styles.css");
         primaryStage.show();
 
-        App app = new App();
+        App app = new App(controller, primaryStage);
         controller.inicializuj(app);
     }
 }
