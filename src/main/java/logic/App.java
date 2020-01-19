@@ -187,4 +187,29 @@ public class App implements Subject{
 
         return sportoviste;
     }
+
+    public void updateSportoviste(Integer id, String nazev, String povrch, String rozmery){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Sportoviste upravovane = getSportovisteDetail(id);
+        upravovane.setNazev(nazev);
+        upravovane.setPovrch(povrch);
+        upravovane.setRozmery(rozmery);
+
+        em.merge(upravovane);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public void removeSportoviste(Integer id){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id",Sportoviste.class).setParameter("id",id).getSingleResult();
+        em.remove(sportoviste);
+
+        em.getTransaction().commit();
+        em.close();
+    }
 }

@@ -16,7 +16,8 @@ public class AdminController implements Observer {
     private App app;
     private ObservableList<String> sportoviste;
 
-    private Boolean pridavamNovouPolozku;
+    private Boolean pridavamNovouPolozku = false;
+    private Sportoviste aktualni;
 
     @FXML
     public Button upravitSportoviste;
@@ -41,22 +42,31 @@ public class AdminController implements Observer {
 
     @Override
     public void update() {
+        //SPORTOVISTE TAB
+        sportoviste = FXCollections.observableArrayList();
+        app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
+        seznamSportoviste.setItems(sportoviste);
 
+        pridavamNovouPolozku = false;
+        aktualni = null;
+        idSportoviste.clear();
+        nazevSportoviste.clear();
+        povrchSportoviste.clear();
+        rozmerySportoviste.clear();
+
+        ulozitSportoviste.setDisable(true);
+        zrusitSportoviste.setDisable(true);
     }
 
     public void inicializuj(App app){
         this.app = app;
         app.register(this);
-
-        sportoviste = FXCollections.observableArrayList();
-        app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
-        seznamSportoviste.setItems(sportoviste);
-
         update();
     }
 
     public void novaPolozkaSportoviste(){
         pridavamNovouPolozku = true;
+        aktualni = null;
 
         idSportoviste.clear();
         nazevSportoviste.clear();
@@ -66,37 +76,71 @@ public class AdminController implements Observer {
         nazevSportoviste.setDisable(false);
         povrchSportoviste.setDisable(false);
         rozmerySportoviste.setDisable(false);
+
+        ulozitSportoviste.setDisable(false);
+        zrusitSportoviste.setDisable(false);
+
+        upravitSportoviste.setDisable(true);
+        smazatSportoviste.setDisable(true);
     }
 
-    public void ulozitSportoviste(){
-        if(pridavamNovouPolozku){
-            String nazev = nazevSportoviste.getText();
-            String povrch = povrchSportoviste.getText();
-            String rozmery = rozmerySportoviste.getText();
+    public void ulozitSportoviste() {
+        String nazev = nazevSportoviste.getText();
+        String povrch = povrchSportoviste.getText();
+        String rozmery = rozmerySportoviste.getText();
 
-            if(nazev.isEmpty() || povrch.isEmpty() || rozmery.isEmpty()){
-                //TODO vrátit chybu
-            } else{
-                app.noveSportoviste(nazev, povrch, rozmery);
-            }
-
+        if (nazev.isEmpty() || povrch.isEmpty() || rozmery.isEmpty()) {
+            //TODO vrátit chybu
+        } else if (pridavamNovouPolozku) {
+            app.noveSportoviste(nazev, povrch, rozmery);
+            } else {
+            app.updateSportoviste(aktualni.getIdSportoviste(), nazev, povrch, rozmery);
         }
+
+        update();
     }
 
     public void vyberSportoviste(){
         String volba = String.valueOf(seznamSportoviste.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
-        Sportoviste sportoviste = app.getSportovisteDetail(id);
+        aktualni = app.getSportovisteDetail(id);
 
         nazevSportoviste.setDisable(true);
         povrchSportoviste.setDisable(true);
         rozmerySportoviste.setDisable(true);
 
-        idSportoviste.setText(sportoviste.getIdSportoviste().toString());
-        nazevSportoviste.setText(sportoviste.getNazev());
-        povrchSportoviste.setText(sportoviste.getPovrch());
-        rozmerySportoviste.setText(sportoviste.getRozmery());
+        idSportoviste.setText(aktualni.getIdSportoviste().toString());
+        nazevSportoviste.setText(aktualni.getNazev());
+        povrchSportoviste.setText(aktualni.getPovrch());
+        rozmerySportoviste.setText(aktualni.getRozmery());
+
+        upravitSportoviste.setDisable(false);
+        smazatSportoviste.setDisable(false);
+        novaPolozkaSportoviste.setDisable(false);
+    }
+
+    public void upravSportoviste(){
+        nazevSportoviste.setDisable(false);
+        povrchSportoviste.setDisable(false);
+        rozmerySportoviste.setDisable(false);
+
+        ulozitSportoviste.setDisable(false);
+        zrusitSportoviste.setDisable(false);
+        novaPolozkaSportoviste.setDisable(true);
+        upravitSportoviste.setDisable(true);
+        smazatSportoviste.setDisable(true);
+    }
+
+    public void smazSportoviste(){
+        //TODO init confirmation popup
+        app.removeSportoviste(aktualni.getIdSportoviste());
+        update();
+    }
+
+    public void zrusitSportoviste(){
+        //TODO init confirmation popup
+        update();
     }
 
 
