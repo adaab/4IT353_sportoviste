@@ -7,7 +7,11 @@ import javafx.scene.control.*;
 import logic.App;
 import logic.Observer;
 import logic.Sportoviste;
+import logic.Trener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +28,7 @@ public class AdminController implements Observer {
     private Boolean pridavamNovouPolozkuTrener = false;
     private Boolean upravujuPolozkuTrener = false;
     private Boolean zobrazujuPolozkuTrener = false;
-    private Sportoviste aktualniTrener;
+    private Trener aktualniTrener;
 
     @FXML
     public Button upravitSportoviste;
@@ -47,6 +51,31 @@ public class AdminController implements Observer {
     @FXML
     public TextField rozmerySportoviste;
 
+    @FXML
+    public Button upravitTrener;
+    @FXML
+    public Button novaPolozkaTrener;
+    @FXML
+    public Button smazatTrener;
+    @FXML
+    public ListView seznamTrener;
+    @FXML
+    public Button ulozitTrener;
+    @FXML
+    public Button zrusitTrener;
+    @FXML
+    public TextField idTrener;
+    @FXML
+    public TextField jmenoTrener;
+    @FXML
+    public TextField telefonTrener;
+    @FXML
+    public TextField emailTrener;
+    @FXML
+    public TextField datumNarozeniTrener;
+    @FXML
+    public TextField uvazekTrener;
+    
     @Override
     public void update() {
         //SPORTOVISTE TAB
@@ -66,6 +95,28 @@ public class AdminController implements Observer {
         ulozitSportoviste.setDisable(true);
         zrusitSportoviste.setDisable(true);
         novaPolozkaSportoviste.setDisable(false);
+
+        //TRENERI TAB
+        treneri = FXCollections.observableArrayList();
+        app.getTreneri().forEach(t -> treneri.add(t.getIdTrener()+": "+t.getJmeno()));
+        seznamTrener.setItems(treneri);
+
+        zobrazujuPolozkuTrener = false;
+        upravujuPolozkuTrener = false;
+        pridavamNovouPolozkuTrener = false;
+        aktualniTrener = null;
+        idTrener.clear();
+        jmenoTrener.clear();
+        telefonTrener.clear();
+        emailTrener.clear();
+        datumNarozeniTrener.clear();
+        uvazekTrener.clear();
+
+        ulozitTrener.setDisable(true);
+        zrusitTrener.setDisable(true);
+        novaPolozkaTrener.setDisable(false);
+
+
     }
 
     public void inicializuj(App app){
@@ -120,6 +171,40 @@ public class AdminController implements Observer {
 
     }
 
+    public void novaPolozkaTrener() {
+        if (upravujuPolozkuTrener || pridavamNovouPolozkuTrener) {
+            if (!getConfirmationPopup("zrusit")) {
+                return;
+            }
+        }
+
+        if (zobrazujuPolozkuTrener) {
+            update();
+        }
+
+        pridavamNovouPolozkuTrener = true;
+
+        idTrener.clear();
+        jmenoTrener.clear();
+        telefonTrener.clear();
+        emailTrener.clear();
+        datumNarozeniTrener.clear();
+        uvazekTrener.clear();
+
+        jmenoTrener.setDisable(false);
+        telefonTrener.setDisable(false);
+        emailTrener.setDisable(false);
+        datumNarozeniTrener.setDisable(false);
+        uvazekTrener.setDisable(false);
+
+        ulozitTrener.setDisable(false);
+        zrusitTrener.setDisable(false);
+
+        upravitTrener.setDisable(true);
+        smazatTrener.setDisable(true);
+
+    }
+
     public void ulozitSportoviste() {
         String nazev = nazevSportoviste.getText();
         String povrch = povrchSportoviste.getText();
@@ -131,6 +216,29 @@ public class AdminController implements Observer {
             app.noveSportoviste(nazev, povrch, rozmery);
             } else {
             app.updateSportoviste(aktualniSportoviste.getIdSportoviste(), nazev, povrch, rozmery);
+        }
+
+        update();
+    }
+
+    public void ulozitTrener() {
+        String jmeno = jmenoTrener.getText();
+        String telefon = telefonTrener.getText();
+        String email = emailTrener.getText();
+        Date datumNarozeni = null;
+        try {
+            datumNarozeni = new SimpleDateFormat("dd.MM.yyyy").parse(datumNarozeniTrener.getText());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Integer uvazek = Integer.parseInt(uvazekTrener.getText());
+
+        if (jmeno.isEmpty() || telefon.isEmpty() || email.isEmpty() || datumNarozeniTrener.getText().isEmpty() || uvazekTrener.getText().isEmpty()) {
+            //TODO vrátit chybu
+        } else if (pridavamNovouPolozkuTrener) {
+            app.novyTrener(jmeno, telefon, email, datumNarozeni, uvazek);
+        } else {
+            app.updateTrener(aktualniTrener.getIdTrener(), jmeno, telefon, email, datumNarozeni, uvazek);
         }
 
         update();
@@ -164,6 +272,42 @@ public class AdminController implements Observer {
         zobrazujuPolozkuSportoviste = true;
     }
 
+    public void vyberTrenera(){
+        if(upravujuPolozkuTrener || pridavamNovouPolozkuTrener){
+            if(!getConfirmationPopup("zrusit")){
+                return;
+            }
+        }
+
+        String volba = String.valueOf(seznamTrener.getSelectionModel().getSelectedItem());
+        String[] parsed = volba.split(": ");
+        Integer id = Integer.parseInt(parsed[0]);
+        aktualniTrener = app.getTrenerDetail(id);
+
+        jmenoTrener.setDisable(true);
+        telefonTrener.setDisable(true);
+        emailTrener.setDisable(true);
+        datumNarozeniTrener.setDisable(true);
+        uvazekTrener.setDisable(true);
+
+        idTrener.setText(aktualniTrener.getIdTrener().toString());
+        jmenoTrener.setText(aktualniTrener.getJmeno());
+        telefonTrener.setText(aktualniTrener.getTelefon());
+        emailTrener.setText(aktualniTrener.getEmail());
+        try {
+            datumNarozeniTrener.setText(aktualniTrener.getDatumNarozeni());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        uvazekTrener.setText(aktualniTrener.getUvazek().toString());
+
+        upravitTrener.setDisable(false);
+        smazatTrener.setDisable(false);
+        novaPolozkaTrener.setDisable(false);
+
+        zobrazujuPolozkuTrener = true;
+    }
+
     public void upravSportoviste(){
         upravujuPolozkuSportoviste = true;
         nazevSportoviste.setDisable(false);
@@ -177,6 +321,21 @@ public class AdminController implements Observer {
         smazatSportoviste.setDisable(true);
     }
 
+    public void upravTrener(){
+        upravujuPolozkuTrener = true;
+        jmenoTrener.setDisable(false);
+        telefonTrener.setDisable(false);
+        emailTrener.setDisable(false);
+        datumNarozeniTrener.setDisable(false);
+        uvazekTrener.setDisable(false);
+
+        ulozitTrener.setDisable(false);
+        zrusitTrener.setDisable(false);
+        novaPolozkaTrener.setDisable(true);
+        upravitTrener.setDisable(true);
+        smazatTrener.setDisable(true);
+    }
+
     public void smazSportoviste(){
         if(getConfirmationPopup("smazat")){
             app.removeSportoviste(aktualniSportoviste.getIdSportoviste());
@@ -184,7 +343,14 @@ public class AdminController implements Observer {
         }
     }
 
-    public void zrusitSportoviste(){
+    public void smazTrener(){
+        if(getConfirmationPopup("smazat")){
+            app.removeTrener(aktualniTrener.getIdTrener());
+            update();
+        }
+    }
+
+    public void zrusit(){
         if(getConfirmationPopup("zrusit")){
             update();
         }

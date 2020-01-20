@@ -11,7 +11,9 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class App implements Subject{
@@ -19,6 +21,7 @@ public class App implements Subject{
     public EntityManagerFactory EMF;
     private int pocetZakazniku;
     private int pocetSportovist;
+    private int pocetTreneru;
 
     private Stage stage;
     private LoginController loginController;
@@ -31,6 +34,7 @@ public class App implements Subject{
         EMF = Persistence.createEntityManagerFactory("punit");
         getPocetZakazniku();
         pocetSportovist = getSportoviste().size();
+        pocetTreneru = getTreneri().size();
     }
 
     @Override
@@ -207,6 +211,73 @@ public class App implements Subject{
 
         Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id",Sportoviste.class).setParameter("id",id).getSingleResult();
         em.remove(sportoviste);
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public List<Trener> getTreneri(){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        List<Trener> treneri = em.createQuery("select t from Trener t",Trener.class).getResultList();
+
+        return treneri;
+    }
+
+    public void novyTrener(String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek) {
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Trener novy = new Trener();
+        novy.setIdTrener(pocetTreneru+1);
+        novy.setJmeno(jmeno);
+        novy.setTelefon(telefon);
+        novy.setEmail(email);
+        novy.setDatumNarozeni(datumNarozeni);
+        novy.setUvazek(uvazek);
+
+        em.merge(novy);
+        em.getTransaction().commit();
+        em.close();
+
+        pocetTreneru++;
+    }
+
+    public void updateTrener(Integer id, String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Trener upravovany = getTrenerDetail(id);
+        upravovany.setJmeno(jmeno);
+        upravovany.setTelefon(telefon);
+        upravovany.setEmail(email);
+        upravovany.setDatumNarozeni(datumNarozeni);
+        upravovany.setUvazek(uvazek);
+
+        em.merge(upravovany);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public Trener getTrenerDetail(Integer id){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id",Trener.class).setParameter("id",id).getSingleResult();
+
+        em.getTransaction().commit();
+        em.close();
+
+        return trener;
+    }
+
+    public void removeTrener(Integer idTrener) {
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id",Trener.class).setParameter("id",idTrener).getSingleResult();
+        em.remove(trener);
 
         em.getTransaction().commit();
         em.close();

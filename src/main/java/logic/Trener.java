@@ -1,22 +1,44 @@
 package logic;
 
-import java.text.DecimalFormat;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
+import java.util.Locale;
 
+@Entity
+@Table(name="Trener")
 public class Trener {
+    @Id
+    @Column(name="idTrener")
     public Integer idTrener;
+    @Column(name="jmeno")
     public String jmeno;
+    @Column(name="telefon")
     public String telefon;
+    @Column(name="email")
     public String email;
-    public String datumNarozeni;
+    @Column(name="datumNarozeni")
+    public Date datumNarozeni;
+    @Column(name="uvazek")
     public Integer uvazek;
 
-    public Trener(Integer idTrener, String jmeno, String telefon, String email, String datumNarozeni, Integer uvazek) {
+    public Trener(Integer idTrener, String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek) {
         this.idTrener = idTrener;
         this.jmeno = jmeno;
         this.telefon = telefon;
         this.email = email;
         this.datumNarozeni = datumNarozeni;
         this.uvazek = uvazek;
+    }
+
+    public Trener() {
     }
 
     public Integer getIdTrener() {
@@ -51,11 +73,15 @@ public class Trener {
         this.email = email;
     }
 
-    public String getDatumNarozeni() {
-        return datumNarozeni;
+    public String getDatumNarozeni() throws ParseException {
+        String datum = datumNarozeni.toString().substring(0,10);
+        String dny = datum.substring(8,10);
+        String mesic = datum.substring(5,7);
+        String rok = datum.substring(0,4);
+        return dny+"."+mesic+"."+rok;
     }
 
-    public void setDatumNarozeni(String datumNarozeni) {
+    public void setDatumNarozeni(Date datumNarozeni) {
         this.datumNarozeni = datumNarozeni;
     }
 
