@@ -44,3 +44,15 @@
 .labelSmall{}
 
 .popup{}
+
+.backButton{
+    -fx-border: 2px solid #00205b;
+    -fx-background-color: white;
+    -fx-text-fill: #00205b;
+    -fx-margin: 0px 10px 20px 0px;
+    -fx-padding: 8px 20px;
+}
+
+.backButton:hover{
+    -fx-background-color: #eeeff2;
+}

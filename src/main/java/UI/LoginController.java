@@ -29,6 +29,8 @@ public class LoginController implements Observer {
     public GridPane signinPane;
     @FXML
     public PasswordField hesloKontrola;
+    @FXML
+    public Button zpet;
 
     @Override
     public void update() {
@@ -67,6 +69,14 @@ public class LoginController implements Observer {
     public void novaRegistrace(){
         loginPane.setVisible(false);
         signinPane.setVisible(true);
+        zpet.setVisible(true);
+        chyba.setVisible(false);
+    }
+
+    public void zpetNaPrihlaseni(){
+        loginPane.setVisible(true);
+        signinPane.setVisible(false);
+        zpet.setVisible(false);
     }
 
     public void zaregistrovat(){
