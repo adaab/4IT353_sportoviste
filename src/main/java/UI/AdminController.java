@@ -140,6 +140,14 @@ public class AdminController implements Observer {
         return ((result.isPresent() && (result.get() == ButtonType.OK)));
     }
 
+    public void vratChybu(String text){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Upozornění");
+        alert.setContentText(text);
+
+        alert.showAndWait();
+    }
+
     public void novaPolozkaSportoviste() {
         if (upravujuPolozkuSportoviste || pridavamNovouPolozkuSportoviste) {
             if (!getConfirmationPopup("zrusit")) {
@@ -211,7 +219,8 @@ public class AdminController implements Observer {
         String rozmery = rozmerySportoviste.getText();
 
         if (nazev.isEmpty() || povrch.isEmpty() || rozmery.isEmpty()) {
-            //TODO vrátit chybu
+            vratChybu("Prosím, vyplňte všechna pole");
+            return;
         } else if (pridavamNovouPolozkuSportoviste) {
             app.noveSportoviste(nazev, povrch, rozmery);
             } else {
@@ -222,6 +231,11 @@ public class AdminController implements Observer {
     }
 
     public void ulozitTrener() {
+        if(!datumNarozeniTrener.getText().matches("\\d{2}\\.\\d{2}\\.\\d{4}")){
+            vratChybu("Prosím, vložte datum narození ve formátu dd.MM.yyyy");
+            return;
+        }
+
         String jmeno = jmenoTrener.getText();
         String telefon = telefonTrener.getText();
         String email = emailTrener.getText();
@@ -234,7 +248,8 @@ public class AdminController implements Observer {
         Integer uvazek = Integer.parseInt(uvazekTrener.getText());
 
         if (jmeno.isEmpty() || telefon.isEmpty() || email.isEmpty() || datumNarozeniTrener.getText().isEmpty() || uvazekTrener.getText().isEmpty()) {
-            //TODO vrátit chybu
+            vratChybu("Prosím, vyplňte všechna pole");
+            return;
         } else if (pridavamNovouPolozkuTrener) {
             app.novyTrener(jmeno, telefon, email, datumNarozeni, uvazek);
         } else {

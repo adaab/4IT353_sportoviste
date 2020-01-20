@@ -4,8 +4,8 @@
     <list default="true" id="2199acc9-904f-4e30-9afe-fc87e8170da7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Trener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Trener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/logic/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/logic/Trener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/Trener.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -157,8 +157,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1641">
-                  <caret line="299" column="12" selection-start-line="299" selection-start-column="12" selection-end-line="299" selection-end-column="32" />
+                <state relative-caret-position="366">
+                  <caret line="244" column="58" selection-start-line="244" selection-start-column="58" selection-end-line="244" selection-end-column="58" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -374,7 +374,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579547083357" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579547941502" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -459,7 +459,7 @@
       <workItem from="1579378129099" duration="1735000" />
       <workItem from="1579379940861" duration="8582000" />
       <workItem from="1579443478330" duration="13909000" />
-      <workItem from="1579542355040" duration="4839000" />
+      <workItem from="1579542355040" duration="5389000" />
     </task>
     <task id="LOCAL-00001" summary="added login screen, styles.ccs">
       <created>1579376731827</created>
@@ -517,11 +517,18 @@
       <option name="project" value="LOCAL" />
       <updated>1579542341770</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Treneri tab functionality">
+      <created>1579547216833</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1579547216833</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43532000" />
+    <option name="totallyTimeSpent" value="44082000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -607,7 +614,8 @@
     <MESSAGE value="admin/sportoviste - added removing logic &amp; screen updating" />
     <MESSAGE value="added confirmation pop-ups" />
     <MESSAGE value="adjusted Treneri fxml tab" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjusted Treneri fxml tab" />
+    <MESSAGE value="Treneri tab functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Treneri tab functionality" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -806,8 +814,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1641">
-          <caret line="299" column="12" selection-start-line="299" selection-start-column="12" selection-end-line="299" selection-end-column="32" />
+        <state relative-caret-position="366">
+          <caret line="244" column="58" selection-start-line="244" selection-start-column="58" selection-end-line="244" selection-end-column="58" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
