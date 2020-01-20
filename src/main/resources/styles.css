@@ -1,24 +1,34 @@
-.loginWindow{
-    -fx-background-color: gray;
-    -fx-border-radius: 15px;
-    -fx-border-color: darkblue;
-    -fx-border-width: 2px;
+.loginWindow {
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 5px 0;
+    -fx-border-radius: 2px;
+    -fx-background-color: rgba(190, 200, 220, 0.6);
 }
 
 .button{
-    -fx-background-color: darkblue;
+    -fx-border: 2px solid;
+    -fx-background-color: #00205b;
     -fx-text-fill: white;
-    -fx-pref-height: 20px;
-    -fx-pref-width: 120px;
+    -fx-margin: 0px 10px 20px 0px;
+    -fx-padding: 8px 20px;
+}
+
+.button:hover{
+    -fx-background-color: #334d7c;
 }
 
 .labelBig{
-    -fx-text-fill: darkblue;
+    -fx-font-size: 40px;
     -fx-font-weight: bold;
+    -fx-text-fill: #00205b;
+ }
+
+*{
+    -fx-font-family: Arial, Helvetica, sans-serif;
 }
 
 .background{
-    -fx-background-color: white;
+    -fx-background-color: #eeeff2;
 }
 
 .dialogPane{
@@ -26,8 +36,10 @@
 }
 
 .warningLabel{
-    -fx-text-fill: red;
+    -fx-text-fill: #e31837;
+    -fx-font-size: 14px;
 }
+
 
 .labelSmall{}
 
