@@ -14,11 +14,17 @@ import java.util.Optional;
 public class AdminController implements Observer {
     private App app;
     private ObservableList<String> sportoviste;
+    private ObservableList<String> treneri;
 
-    private Boolean pridavamNovouPolozku = false;
-    private Boolean upravujuPolozku = false;
-    private Boolean zobrazujuPolozku = false;
-    private Sportoviste aktualni;
+    private Boolean pridavamNovouPolozkuSportoviste = false;
+    private Boolean upravujuPolozkuSportoviste = false;
+    private Boolean zobrazujuPolozkuSportoviste = false;
+    private Sportoviste aktualniSportoviste;
+
+    private Boolean pridavamNovouPolozkuTrener = false;
+    private Boolean upravujuPolozkuTrener = false;
+    private Boolean zobrazujuPolozkuTrener = false;
+    private Sportoviste aktualniTrener;
 
     @FXML
     public Button upravitSportoviste;
@@ -40,8 +46,6 @@ public class AdminController implements Observer {
     public TextField povrchSportoviste;
     @FXML
     public TextField rozmerySportoviste;
-    @FXML
-    public DialogPane popupSportoviste;
 
     @Override
     public void update() {
@@ -50,10 +54,10 @@ public class AdminController implements Observer {
         app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
         seznamSportoviste.setItems(sportoviste);
 
-        zobrazujuPolozku = false;
-        upravujuPolozku = false;
-        pridavamNovouPolozku = false;
-        aktualni = null;
+        zobrazujuPolozkuSportoviste = false;
+        upravujuPolozkuSportoviste = false;
+        pridavamNovouPolozkuSportoviste = false;
+        aktualniSportoviste = null;
         idSportoviste.clear();
         nazevSportoviste.clear();
         povrchSportoviste.clear();
@@ -86,18 +90,18 @@ public class AdminController implements Observer {
     }
 
     public void novaPolozkaSportoviste() {
-        if (upravujuPolozku || pridavamNovouPolozku) {
+        if (upravujuPolozkuSportoviste || pridavamNovouPolozkuSportoviste) {
             if (!getConfirmationPopup("zrusit")) {
                 return;
             }
         }
 
-        if (zobrazujuPolozku) {
+        if (zobrazujuPolozkuSportoviste) {
             update();
         }
 
-        pridavamNovouPolozku = true;
-        aktualni = null;
+        pridavamNovouPolozkuSportoviste = true;
+        aktualniSportoviste = null;
 
         idSportoviste.clear();
         nazevSportoviste.clear();
@@ -123,17 +127,17 @@ public class AdminController implements Observer {
 
         if (nazev.isEmpty() || povrch.isEmpty() || rozmery.isEmpty()) {
             //TODO vrátit chybu
-        } else if (pridavamNovouPolozku) {
+        } else if (pridavamNovouPolozkuSportoviste) {
             app.noveSportoviste(nazev, povrch, rozmery);
             } else {
-            app.updateSportoviste(aktualni.getIdSportoviste(), nazev, povrch, rozmery);
+            app.updateSportoviste(aktualniSportoviste.getIdSportoviste(), nazev, povrch, rozmery);
         }
 
         update();
     }
 
     public void vyberSportoviste(){
-        if(upravujuPolozku || pridavamNovouPolozku){
+        if(upravujuPolozkuSportoviste || pridavamNovouPolozkuSportoviste){
             if(!getConfirmationPopup("zrusit")){
                 return;
             }
@@ -142,26 +146,26 @@ public class AdminController implements Observer {
         String volba = String.valueOf(seznamSportoviste.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
-        aktualni = app.getSportovisteDetail(id);
+        aktualniSportoviste = app.getSportovisteDetail(id);
 
         nazevSportoviste.setDisable(true);
         povrchSportoviste.setDisable(true);
         rozmerySportoviste.setDisable(true);
 
-        idSportoviste.setText(aktualni.getIdSportoviste().toString());
-        nazevSportoviste.setText(aktualni.getNazev());
-        povrchSportoviste.setText(aktualni.getPovrch());
-        rozmerySportoviste.setText(aktualni.getRozmery());
+        idSportoviste.setText(aktualniSportoviste.getIdSportoviste().toString());
+        nazevSportoviste.setText(aktualniSportoviste.getNazev());
+        povrchSportoviste.setText(aktualniSportoviste.getPovrch());
+        rozmerySportoviste.setText(aktualniSportoviste.getRozmery());
 
         upravitSportoviste.setDisable(false);
         smazatSportoviste.setDisable(false);
         novaPolozkaSportoviste.setDisable(false);
 
-        zobrazujuPolozku = true;
+        zobrazujuPolozkuSportoviste = true;
     }
 
     public void upravSportoviste(){
-        upravujuPolozku = true;
+        upravujuPolozkuSportoviste = true;
         nazevSportoviste.setDisable(false);
         povrchSportoviste.setDisable(false);
         rozmerySportoviste.setDisable(false);
@@ -175,7 +179,7 @@ public class AdminController implements Observer {
 
     public void smazSportoviste(){
         if(getConfirmationPopup("smazat")){
-            app.removeSportoviste(aktualni.getIdSportoviste());
+            app.removeSportoviste(aktualniSportoviste.getIdSportoviste());
             update();
         }
     }
