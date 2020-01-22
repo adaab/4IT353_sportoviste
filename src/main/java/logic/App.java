@@ -294,7 +294,7 @@ public class App implements Subject{
         return akce;
     }
 
-    public void novaRozvrhovaAkce(RozvrhovaAkce.TypLekce typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste) {
+    public void novaRozvrhovaAkce(String typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste) {
         EntityManager em = EMF.createEntityManager();
         em.getTransaction().begin();
 
@@ -315,7 +315,7 @@ public class App implements Subject{
         pocetRozvrhoveAkce++;
     }
 
-    public void updateRozvrhovaAkce(Integer id, RozvrhovaAkce.TypLekce typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste){
+    public void updateRozvrhovaAkce(Integer id, String typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste){
         EntityManager em = EMF.createEntityManager();
         em.getTransaction().begin();
 

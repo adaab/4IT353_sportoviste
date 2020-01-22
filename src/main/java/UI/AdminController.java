@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import logic.App;
-import logic.Observer;
-import logic.Sportoviste;
-import logic.Trener;
+import logic.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +31,8 @@ public class AdminController implements Observer {
     private Boolean pridavamNovouPolozkuAkce = false;
     private Boolean upravujuPolozkuAkce = false;
     private Boolean zobrazujuPolozkuAkce = false;
-    private Trener aktualniAkce;
+    private RozvrhovaAkce aktualniAkce;
+    private int aktualniTyden;
 
     @FXML
     public Button upravitSportoviste;
@@ -91,7 +89,7 @@ public class AdminController implements Observer {
     @FXML
     public TableView rozvrh;
     @FXML
-    public TableColumn sloupec11;
+    public TableColumn sloupecDny;
     @FXML
     public TableColumn sloupec12;
     @FXML
@@ -242,12 +240,6 @@ public class AdminController implements Observer {
         }
 
         pridavamNovouPolozkuSportoviste = true;
-        aktualniSportoviste = null;
-
-        idSportoviste.clear();
-        nazevSportoviste.clear();
-        povrchSportoviste.clear();
-        rozmerySportoviste.clear();
 
         nazevSportoviste.setDisable(false);
         povrchSportoviste.setDisable(false);
@@ -274,13 +266,6 @@ public class AdminController implements Observer {
 
         pridavamNovouPolozkuTrener = true;
 
-        idTrener.clear();
-        jmenoTrener.clear();
-        telefonTrener.clear();
-        emailTrener.clear();
-        datumNarozeniTrener.clear();
-        uvazekTrener.clear();
-
         jmenoTrener.setDisable(false);
         telefonTrener.setDisable(false);
         emailTrener.setDisable(false);
@@ -293,6 +278,36 @@ public class AdminController implements Observer {
         upravitTrener.setDisable(true);
         smazatTrener.setDisable(true);
 
+    }
+
+    public void novaPolozkaRozvrh() {
+        if (upravujuPolozkuAkce || pridavamNovouPolozkuAkce) {
+            if (!getConfirmationPopup("zrusit")) {
+                return;
+            }
+        }
+
+        if (zobrazujuPolozkuAkce) {
+            update();
+        }
+
+        pridavamNovouPolozkuAkce = true;
+
+        typLekce.setDisable(false);
+        datumRozvrhovaAkce.setDisable(false);
+        volnaMista.setDisable(false);
+        odRozvrhovaAkce.setDisable(false);
+        doRozvrhovaAkce.setDisable(false);
+        trenerRozvrhovaAkce.setDisable(false);
+        sportovisteRozvrhovaAkce.setDisable(false);
+
+        ulozitRozvrh.setDisable(false);
+        zrusitRozvrh.setDisable(false);
+
+        upravitRozvrh.setDisable(true);
+        smazatRozvrh.setDisable(true);
+        nasledujiciTyden.setDisable(true);
+        predchoziTyden.setDisable(true);
     }
 
     public void ulozitSportoviste() {
@@ -336,6 +351,39 @@ public class AdminController implements Observer {
             app.novyTrener(jmeno, telefon, email, datumNarozeni, uvazek);
         } else {
             app.updateTrener(aktualniTrener.getIdTrener(), jmeno, telefon, email, datumNarozeni, uvazek);
+        }
+
+        update();
+    }
+
+    public void ulozitRozvrh() {
+        String lekce = typLekce.getText();
+        Date datum = null;
+        try {
+            datum = new SimpleDateFormat("dd.MM.yyyy").parse(datumRozvrhovaAkce.getEditor().getText());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Integer mista = Integer.parseInt(volnaMista.getText());
+        String casOd = odRozvrhovaAkce.getText();
+        String casDo = doRozvrhovaAkce.getText();
+
+        String trener = trenerRozvrhovaAkce.getEditor().getText();
+        String[] parsed = trener.split(": ");
+        Integer idTrener = Integer.parseInt(parsed[0]);
+
+        String sportoviste = sportovisteRozvrhovaAkce.getEditor().getText();
+        String[] parsed2 = sportoviste.split(": ");
+        Integer idSportoviste = Integer.parseInt(parsed[0]);
+
+
+        if (lekce.isEmpty() || datumRozvrhovaAkce.getEditor().getText().isEmpty() || mista.toString().isEmpty() || casOd.isEmpty() || casDo.isEmpty() || trener.isEmpty() || sportoviste.isEmpty()){
+            vratChybu("Prosím, vyplňte všechna pole");
+            return;
+        } else if (pridavamNovouPolozkuAkce) {
+            app.novaRozvrhovaAkce(lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
+        } else {
+            app.updateRozvrhovaAkce(aktualniAkce.getIdRozvrhovaAkce(), lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
         }
 
         update();
@@ -433,6 +481,25 @@ public class AdminController implements Observer {
         smazatTrener.setDisable(true);
     }
 
+    public void upravAkce(){
+        upravujuPolozkuAkce = true;
+        typLekce.setDisable(false);
+        datumRozvrhovaAkce.setDisable(false);
+        odRozvrhovaAkce.setDisable(false);
+        doRozvrhovaAkce.setDisable(false);
+        volnaMista.setDisable(false);
+        trenerRozvrhovaAkce.setDisable(false);
+        sportovisteRozvrhovaAkce.setDisable(false);
+
+        ulozitRozvrh.setDisable(false);
+        zrusitRozvrh.setDisable(false);
+        novaPolozkaRozvrh.setDisable(true);
+        upravitRozvrh.setDisable(true);
+        smazatRozvrh.setDisable(true);
+        nasledujiciTyden.setDisable(true);
+        predchoziTyden.setDisable(true);
+    }
+
     public void smazSportoviste(){
         if(getConfirmationPopup("smazat")){
             app.removeSportoviste(aktualniSportoviste.getIdSportoviste());
@@ -447,10 +514,26 @@ public class AdminController implements Observer {
         }
     }
 
+    public void smazAkce(){
+        if(getConfirmationPopup("smazat")){
+            app.removeRozvrhovaAkce(aktualniAkce.getIdRozvrhovaAkce());
+            update();
+        }
+    }
+
     public void zrusit(){
         if(getConfirmationPopup("zrusit")){
             update();
         }
     }
 
+    public void nasledujiciTyden(){
+        aktualniTyden++;
+        update();
+    }
+
+    public void pristiTyden(){
+        aktualniTyden--;
+        update();
+    }
 }

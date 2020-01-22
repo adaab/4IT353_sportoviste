@@ -20,7 +20,7 @@ public class RozvrhovaAkce {
     @Column(name="casDo")
     public String casDo;
     @Column(name="typLekce")
-    public TypLekce typLekce;
+    public String typLekce;
     @Column(name="volnaMista")
     public Integer volnaMista;
     @Column(name="Trener_idTrener")
@@ -31,6 +31,7 @@ public class RozvrhovaAkce {
     public RozvrhovaAkce() {
     }
 
+    /*
     public enum TypLekce{
         aerobik,
         spinning,
@@ -38,9 +39,9 @@ public class RozvrhovaAkce {
         kruhovyTrenink,
         posilovani,
         pilates
-    }
+    }*/
 
-    public RozvrhovaAkce(Integer idRozvrhovaAkce, Date datum, String casOd, String casDo, TypLekce typLekce, Integer volnaMista) {
+    public RozvrhovaAkce(Integer idRozvrhovaAkce, Date datum, String casOd, String casDo, String typLekce, Integer volnaMista) {
         this.idRozvrhovaAkce = idRozvrhovaAkce;
         this.datum = datum;
         this.casOd = casOd;
@@ -81,11 +82,11 @@ public class RozvrhovaAkce {
         this.casDo = casDo;
     }
 
-    public TypLekce getTypLekce() {
+    public String getTypLekce() {
         return typLekce;
     }
 
-    public void setTypLekce(TypLekce typLekce) {
+    public void setTypLekce(String typLekce) {
         this.typLekce = typLekce;
     }
 
