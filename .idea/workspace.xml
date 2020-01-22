@@ -4,8 +4,10 @@
     <list default="true" id="2199acc9-904f-4e30-9afe-fc87e8170da7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/RozvrhovaAkce.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/RozvrhovaAkce.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/logic/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce$TypLekce.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -65,7 +67,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/logic/Trener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
-              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#594#595#0" expanded="true" />
@@ -99,7 +101,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/logic/RozvrhovaAkce.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1326#1327#0" expanded="true" />
@@ -175,27 +177,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/styles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+            <state relative-caret-position="216">
+              <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/admin.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="288" column="80" selection-start-line="288" selection-start-column="80" selection-end-line="288" selection-end-column="80" />
+            <state relative-caret-position="238">
+              <caret line="250" column="45" lean-forward="true" selection-start-line="250" selection-start-column="45" selection-end-line="250" selection-end-column="45" />
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="331" column="9" lean-forward="true" selection-start-line="331" selection-start-column="9" selection-end-line="331" selection-end-column="9" />
+            <state relative-caret-position="175">
+              <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -217,7 +219,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/logic/App.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
-              <caret line="330" column="29" lean-forward="true" selection-start-line="330" selection-start-column="29" selection-end-line="330" selection-end-column="29" />
+              <caret line="330" column="29" selection-start-line="330" selection-start-column="29" selection-end-line="330" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -242,6 +244,8 @@
       <find>Sportoviste</find>
       <find>novy</find>
       <find>datum</find>
+      <find>odRo</find>
+      <find>doRo</find>
     </findStrings>
     <replaceStrings>
       <replace>Trener</replace>
@@ -268,11 +272,11 @@
         <option value="$PROJECT_DIR$/src/main/java/logic/Trener.java" />
         <option value="$PROJECT_DIR$/src/main/resources/login.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/UI/LoginController.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/styles.css" />
         <option value="$PROJECT_DIR$/src/main/java/logic/RozvrhovaAkce.java" />
         <option value="$PROJECT_DIR$/src/main/java/logic/App.java" />
-        <option value="$PROJECT_DIR$/src/main/java/UI/AdminController.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/styles.css" />
         <option value="$PROJECT_DIR$/src/main/resources/admin.fxml" />
+        <option value="$PROJECT_DIR$/src/main/java/UI/AdminController.java" />
       </list>
     </option>
   </component>
@@ -397,7 +401,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579723939834" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579725993485" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -482,7 +486,7 @@
       <workItem from="1579378129099" duration="1735000" />
       <workItem from="1579379940861" duration="8582000" />
       <workItem from="1579443478330" duration="13909000" />
-      <workItem from="1579542355040" duration="15613000" />
+      <workItem from="1579542355040" duration="17667000" />
     </task>
     <task id="LOCAL-00001" summary="added login screen, styles.ccs">
       <created>1579376731827</created>
@@ -575,17 +579,24 @@
       <option name="project" value="LOCAL" />
       <updated>1579720281300</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="added methods to AdminController">
+      <created>1579724065445</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1579724065445</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54306000" />
+    <option name="totallyTimeSpent" value="56360000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13557047" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23624161" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -595,7 +606,7 @@
       <window_info id="Persistence" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.9275053" visible="true" weight="0.04249292" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.9275053" weight="0.04249292" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -616,7 +627,7 @@
       <window_info anchor="right" id="Maven" order="5" weight="0.39498934" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Database" order="8" visible="true" weight="0.16510066" />
+      <window_info anchor="right" id="Database" order="8" weight="0.020134227" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13219616" />
@@ -670,7 +681,8 @@
     <MESSAGE value=".css file adjusted" />
     <MESSAGE value="added back button to login screen" />
     <MESSAGE value="added RozvrhovaAkce methods to App, adjusted admin.fxml with RozvrhovaAkce tab" />
-    <option name="LAST_COMMIT_MESSAGE" value="added RozvrhovaAkce methods to App, adjusted admin.fxml with RozvrhovaAkce tab" />
+    <MESSAGE value="added methods to AdminController" />
+    <option name="LAST_COMMIT_MESSAGE" value="added methods to AdminController" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -788,17 +800,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="50" column="21" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/logic/Trener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#594#595#0" expanded="true" />
@@ -840,7 +845,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/logic/RozvrhovaAkce.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1326#1327#0" expanded="true" />
@@ -882,30 +887,37 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/logic/App.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
-          <caret line="330" column="29" lean-forward="true" selection-start-line="330" selection-start-column="29" selection-end-line="330" selection-end-column="29" />
+          <caret line="330" column="29" selection-start-line="330" selection-start-column="29" selection-end-line="330" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/styles.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="331" column="9" lean-forward="true" selection-start-line="331" selection-start-column="9" selection-end-line="331" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="216">
+          <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/admin.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="288" column="80" selection-start-line="288" selection-start-column="80" selection-end-line="288" selection-end-column="80" />
+        <state relative-caret-position="238">
+          <caret line="250" column="45" lean-forward="true" selection-start-line="250" selection-start-column="45" selection-end-line="250" selection-end-column="45" />
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">

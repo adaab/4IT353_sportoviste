@@ -59,3 +59,11 @@
 .backButton:hover{
     -fx-background-color: #eeeff2;
 }
+
+.rozvrh{
+
+}
+
+.rozvrhSloupec{
+    -fx-cell-size: 50px;
+}

@@ -119,9 +119,9 @@ public class AdminController implements Observer {
     @FXML
     public TextField volnaMista;
     @FXML
-    public TextField odRozvrhovaAkce;
+    public ComboBox odRozvrhovaAkce;
     @FXML
-    public TextField doRozvrhovaAkce;
+    public ComboBox doRozvrhovaAkce;
     @FXML
     public ComboBox trenerRozvrhovaAkce;
     @FXML
@@ -184,8 +184,8 @@ public class AdminController implements Observer {
         idRozvrhovaAkce.clear();
         typLekce.clear();
         datumRozvrhovaAkce.getEditor().clear();
-        odRozvrhovaAkce.clear();
-        doRozvrhovaAkce.clear();
+        odRozvrhovaAkce.getEditor().clear();
+        doRozvrhovaAkce.getEditor().clear();
         volnaMista.clear();
         sportovisteRozvrhovaAkce.getEditor().clear();
         trenerRozvrhovaAkce.getEditor().clear();
@@ -365,8 +365,8 @@ public class AdminController implements Observer {
             e.printStackTrace();
         }
         Integer mista = Integer.parseInt(volnaMista.getText());
-        String casOd = odRozvrhovaAkce.getText();
-        String casDo = doRozvrhovaAkce.getText();
+        String casOd = odRozvrhovaAkce.getEditor().getText();
+        String casDo = doRozvrhovaAkce.getEditor().getText();
 
         String trener = trenerRozvrhovaAkce.getEditor().getText();
         String[] parsed = trener.split(": ");
