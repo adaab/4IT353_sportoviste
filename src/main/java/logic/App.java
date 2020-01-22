@@ -22,6 +22,7 @@ public class App implements Subject{
     private int pocetZakazniku;
     private int pocetSportovist;
     private int pocetTreneru;
+    private int pocetRozvrhoveAkce;
 
     private Stage stage;
     private LoginController loginController;
@@ -35,6 +36,7 @@ public class App implements Subject{
         getPocetZakazniku();
         pocetSportovist = getSportoviste().size();
         pocetTreneru = getTreneri().size();
+        pocetRozvrhoveAkce = getRozvrhoveAkce().size();
     }
 
     @Override
@@ -278,6 +280,77 @@ public class App implements Subject{
 
         Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id",Trener.class).setParameter("id",idTrener).getSingleResult();
         em.remove(trener);
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public List<RozvrhovaAkce> getRozvrhoveAkce(){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        List<RozvrhovaAkce> akce = em.createQuery("select a from RozvrhovaAkce a",RozvrhovaAkce.class).getResultList();
+
+        return akce;
+    }
+
+    public void novaRozvrhovaAkce(RozvrhovaAkce.TypLekce typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste) {
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        RozvrhovaAkce novy = new RozvrhovaAkce();
+        novy.setIdRozvrhovaAkce(pocetRozvrhoveAkce+1);
+        novy.setTypLekce(typLekce);
+        novy.setDatum(datum);
+        novy.setCasOd(casOd);
+        novy.setCasDo(casDo);
+        novy.setVolnaMista(volnaMista);
+        novy.setIdTrener(idTrener);
+        novy.setIdSportoviste(idSportoviste);
+
+        em.merge(novy);
+        em.getTransaction().commit();
+        em.close();
+
+        pocetRozvrhoveAkce++;
+    }
+
+    public void updateRozvrhovaAkce(Integer id, RozvrhovaAkce.TypLekce typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        RozvrhovaAkce upravovany = getRozvrhoveAkceDetail(id);
+        upravovany.setTypLekce(typLekce);
+        upravovany.setDatum(datum);
+        upravovany.setCasOd(casOd);
+        upravovany.setCasDo(casDo);
+        upravovany.setVolnaMista(volnaMista);
+        upravovany.setIdTrener(idTrener);
+        upravovany.setIdSportoviste(idSportoviste);
+
+        em.merge(upravovany);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public RozvrhovaAkce getRozvrhoveAkceDetail(Integer id){
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        RozvrhovaAkce akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id",RozvrhovaAkce.class).setParameter("id",id).getSingleResult();
+
+        em.getTransaction().commit();
+        em.close();
+
+        return akce;
+    }
+
+    public void removeRozvrhovaAkce(Integer id) {
+        EntityManager em = EMF.createEntityManager();
+        em.getTransaction().begin();
+
+        RozvrhovaAkce akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id",RozvrhovaAkce.class).setParameter("id",id).getSingleResult();
+        em.remove(akce);
 
         em.getTransaction().commit();
         em.close();

@@ -19,6 +19,7 @@ public class AdminController implements Observer {
     private App app;
     private ObservableList<String> sportoviste;
     private ObservableList<String> treneri;
+    private ObservableList<String> akce;
 
     private Boolean pridavamNovouPolozkuSportoviste = false;
     private Boolean upravujuPolozkuSportoviste = false;
@@ -29,6 +30,11 @@ public class AdminController implements Observer {
     private Boolean upravujuPolozkuTrener = false;
     private Boolean zobrazujuPolozkuTrener = false;
     private Trener aktualniTrener;
+
+    private Boolean pridavamNovouPolozkuAkce = false;
+    private Boolean upravujuPolozkuAkce = false;
+    private Boolean zobrazujuPolozkuAkce = false;
+    private Trener aktualniAkce;
 
     @FXML
     public Button upravitSportoviste;
@@ -75,7 +81,58 @@ public class AdminController implements Observer {
     public TextField datumNarozeniTrener;
     @FXML
     public TextField uvazekTrener;
-    
+
+    @FXML
+    public Button upravitRozvrh;
+    @FXML
+    public Button novaPolozkaRozvrh;
+    @FXML
+    public Button smazatRozvrh;
+    @FXML
+    public TableView rozvrh;
+    @FXML
+    public TableColumn sloupec11;
+    @FXML
+    public TableColumn sloupec12;
+    @FXML
+    public TableColumn sloupec13;
+    @FXML
+    public TableColumn sloupec14;
+    @FXML
+    public TableColumn sloupec15;
+    @FXML
+    public TableColumn sloupec16;
+    @FXML
+    public TableColumn sloupec17;
+    @FXML
+    public TableColumn sloupec18;
+    @FXML
+    public TableColumn sloupec19;
+    @FXML
+    public Button ulozitRozvrh;
+    @FXML
+    public Button zrusitRozvrh;
+    @FXML
+    public TextField idRozvrhovaAkce;
+    @FXML
+    public TextField typLekce;
+    @FXML
+    public DatePicker datumRozvrhovaAkce;
+    @FXML
+    public TextField volnaMista;
+    @FXML
+    public TextField odRozvrhovaAkce;
+    @FXML
+    public TextField doRozvrhovaAkce;
+    @FXML
+    public ComboBox trenerRozvrhovaAkce;
+    @FXML
+    public ComboBox sportovisteRozvrhovaAkce;
+    @FXML
+    public Button nasledujiciTyden;
+    @FXML
+    public Button predchoziTyden;
+
     @Override
     public void update() {
         //SPORTOVISTE TAB
@@ -116,6 +173,31 @@ public class AdminController implements Observer {
         zrusitTrener.setDisable(true);
         novaPolozkaTrener.setDisable(false);
 
+        //AKCE TAB
+        /*
+        akce = FXCollections.observableArrayList();
+        app.getRozvrhoveAkce().forEach(a -> akce.add(a.getIdRozvrhovaAkce()+": "+a.getTypLekce()));
+        rozvrh.setItems(treneri);*/
+
+        zobrazujuPolozkuAkce = false;
+        upravujuPolozkuAkce = false;
+        pridavamNovouPolozkuAkce = false;
+        aktualniAkce = null;
+        idRozvrhovaAkce.clear();
+        typLekce.clear();
+        datumRozvrhovaAkce.getEditor().clear();
+        odRozvrhovaAkce.clear();
+        doRozvrhovaAkce.clear();
+        volnaMista.clear();
+        sportovisteRozvrhovaAkce.getEditor().clear();
+        trenerRozvrhovaAkce.getEditor().clear();
+
+        ulozitRozvrh.setDisable(true);
+        zrusitRozvrh.setDisable(true);
+        novaPolozkaRozvrh.setDisable(false);
+
+        nasledujiciTyden.setDisable(false);
+        predchoziTyden.setDisable(false);
 
     }
 

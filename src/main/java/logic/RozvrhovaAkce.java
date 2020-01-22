@@ -14,7 +14,7 @@ public class RozvrhovaAkce {
     @Column(name="idRozvrhovaAkce")
     public Integer idRozvrhovaAkce;
     @Column(name="datum")
-    public LocalDate datum;
+    public Date datum;
     @Column(name="casOd")
     public String casOd;
     @Column(name="casDo")
@@ -23,6 +23,10 @@ public class RozvrhovaAkce {
     public TypLekce typLekce;
     @Column(name="volnaMista")
     public Integer volnaMista;
+    @Column(name="Trener_idTrener")
+    public Integer idTrener;
+    @Column(name="Sportoviste_idSportoviste")
+    public Integer idSportoviste;
 
     public RozvrhovaAkce() {
     }
@@ -36,7 +40,7 @@ public class RozvrhovaAkce {
         pilates
     }
 
-    public RozvrhovaAkce(Integer idRozvrhovaAkce, LocalDate datum, String casOd, String casDo, TypLekce typLekce, Integer volnaMista) {
+    public RozvrhovaAkce(Integer idRozvrhovaAkce, Date datum, String casOd, String casDo, TypLekce typLekce, Integer volnaMista) {
         this.idRozvrhovaAkce = idRozvrhovaAkce;
         this.datum = datum;
         this.casOd = casOd;
@@ -53,11 +57,11 @@ public class RozvrhovaAkce {
         this.idRozvrhovaAkce = idRozvrhovaAkce;
     }
 
-    public LocalDate getDatum() {
+    public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDate datum) {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
 
@@ -91,5 +95,21 @@ public class RozvrhovaAkce {
 
     public void setVolnaMista(Integer volnaMista) {
         this.volnaMista = volnaMista;
+    }
+
+    public Integer getIdTrener() {
+        return idTrener;
+    }
+
+    public void setIdTrener(Integer idTrener) {
+        this.idTrener = idTrener;
+    }
+
+    public Integer getIdSportoviste() {
+        return idSportoviste;
+    }
+
+    public void setIdSportoviste(Integer idSportoviste) {
+        this.idSportoviste = idSportoviste;
     }
 }

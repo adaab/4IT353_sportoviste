@@ -6,7 +6,8 @@
 }
 
 .button{
-    -fx-border: 2px solid;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
     -fx-background-color: #00205b;
     -fx-text-fill: white;
     -fx-margin: 0px 10px 20px 0px;
@@ -46,7 +47,9 @@
 .popup{}
 
 .backButton{
-    -fx-border: 2px solid #00205b;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #00205b;
     -fx-background-color: white;
     -fx-text-fill: #00205b;
     -fx-margin: 0px 10px 20px 0px;
