@@ -8,6 +8,7 @@ import logic.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,10 @@ public class AdminController implements Observer {
     private ObservableList<String> sportoviste;
     private ObservableList<String> treneri;
     private ObservableList<String> akce;
+
+    private ArrayList<TextField> sportovistePole;
+    private ArrayList<TextField> treneriPole;
+    private ArrayList<ComboBox> akceComboBoxy;
 
     private Boolean pridavamNovouPolozkuSportoviste = false;
     private Boolean upravujuPolozkuSportoviste = false;
@@ -33,6 +38,8 @@ public class AdminController implements Observer {
     private Boolean zobrazujuPolozkuAkce = false;
     private RozvrhovaAkce aktualniAkce;
     private int aktualniTyden;
+
+    private ObservableList<String> hodiny;
 
     @FXML
     public Button upravitSportoviste;
@@ -133,6 +140,26 @@ public class AdminController implements Observer {
 
     @Override
     public void update() {
+        sportovistePole = new ArrayList<>();
+        sportovistePole.add(idSportoviste);
+        sportovistePole.add(nazevSportoviste);
+        sportovistePole.add(povrchSportoviste);
+        sportovistePole.add(rozmerySportoviste);
+
+        treneriPole = new ArrayList<>();
+        treneriPole.add(idTrener);
+        treneriPole.add(jmenoTrener);
+        treneriPole.add(telefonTrener);
+        treneriPole.add(emailTrener);
+        treneriPole.add(datumNarozeniTrener);
+        treneriPole.add(uvazekTrener);
+
+        akceComboBoxy = new ArrayList<>();
+        akceComboBoxy.add(odRozvrhovaAkce);
+        akceComboBoxy.add(doRozvrhovaAkce);
+        akceComboBoxy.add(trenerRozvrhovaAkce);
+        akceComboBoxy.add(sportovisteRozvrhovaAkce);
+
         //SPORTOVISTE TAB
         sportoviste = FXCollections.observableArrayList();
         app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
@@ -142,10 +169,9 @@ public class AdminController implements Observer {
         upravujuPolozkuSportoviste = false;
         pridavamNovouPolozkuSportoviste = false;
         aktualniSportoviste = null;
-        idSportoviste.clear();
-        nazevSportoviste.clear();
-        povrchSportoviste.clear();
-        rozmerySportoviste.clear();
+
+        sportovistePole.forEach(s -> s.clear());
+        sportovistePole.forEach(s -> s.setDisable(true));
 
         ulozitSportoviste.setDisable(true);
         zrusitSportoviste.setDisable(true);
@@ -160,12 +186,9 @@ public class AdminController implements Observer {
         upravujuPolozkuTrener = false;
         pridavamNovouPolozkuTrener = false;
         aktualniTrener = null;
-        idTrener.clear();
-        jmenoTrener.clear();
-        telefonTrener.clear();
-        emailTrener.clear();
-        datumNarozeniTrener.clear();
-        uvazekTrener.clear();
+
+        treneriPole.forEach(t -> t.clear());
+        treneriPole.forEach(t -> t.setDisable(true));
 
         ulozitTrener.setDisable(true);
         zrusitTrener.setDisable(true);
@@ -181,14 +204,14 @@ public class AdminController implements Observer {
         upravujuPolozkuAkce = false;
         pridavamNovouPolozkuAkce = false;
         aktualniAkce = null;
+
         idRozvrhovaAkce.clear();
         typLekce.clear();
         datumRozvrhovaAkce.getEditor().clear();
-        odRozvrhovaAkce.getEditor().clear();
-        doRozvrhovaAkce.getEditor().clear();
         volnaMista.clear();
-        sportovisteRozvrhovaAkce.getEditor().clear();
-        trenerRozvrhovaAkce.getEditor().clear();
+
+        akceComboBoxy.forEach(c -> c.setValue(null));
+        akceComboBoxy.forEach(c -> c.setDisable(true));
 
         ulozitRozvrh.setDisable(true);
         zrusitRozvrh.setDisable(true);
@@ -196,6 +219,13 @@ public class AdminController implements Observer {
 
         nasledujiciTyden.setDisable(false);
         predchoziTyden.setDisable(false);
+
+        hodiny = FXCollections.observableArrayList();
+        hodiny.addAll("12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00");
+        odRozvrhovaAkce.setItems(hodiny);
+        doRozvrhovaAkce.setItems(hodiny);
+        trenerRozvrhovaAkce.setItems(treneri);
+        sportovisteRozvrhovaAkce.setItems(sportoviste);
 
     }
 
@@ -365,14 +395,14 @@ public class AdminController implements Observer {
             e.printStackTrace();
         }
         Integer mista = Integer.parseInt(volnaMista.getText());
-        String casOd = odRozvrhovaAkce.getEditor().getText();
-        String casDo = doRozvrhovaAkce.getEditor().getText();
+        String casOd = odRozvrhovaAkce.getValue().toString();
+        String casDo = doRozvrhovaAkce.getValue().toString();
 
-        String trener = trenerRozvrhovaAkce.getEditor().getText();
+        String trener = trenerRozvrhovaAkce.getValue().toString();
         String[] parsed = trener.split(": ");
         Integer idTrener = Integer.parseInt(parsed[0]);
 
-        String sportoviste = sportovisteRozvrhovaAkce.getEditor().getText();
+        String sportoviste = sportovisteRozvrhovaAkce.getValue().toString();
         String[] parsed2 = sportoviste.split(": ");
         Integer idSportoviste = Integer.parseInt(parsed[0]);
 

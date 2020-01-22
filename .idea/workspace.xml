@@ -4,10 +4,6 @@
     <list default="true" id="2199acc9-904f-4e30-9afe-fc87e8170da7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/UI/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/logic/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce$TypLekce.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logic/RozvrhovaAkce.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -144,8 +140,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/UI/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
+            <state relative-caret-position="118">
+              <caret line="55" selection-start-line="55" selection-end-line="55" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -186,8 +182,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/admin.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="250" column="45" lean-forward="true" selection-start-line="250" selection-start-column="45" selection-end-line="250" selection-end-column="45" />
+            <state relative-caret-position="224">
+              <caret line="286" column="52" lean-forward="true" selection-start-line="286" selection-start-column="52" selection-end-line="286" selection-end-column="52" />
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder" />
@@ -196,8 +192,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
+            <state relative-caret-position="230">
+              <caret line="328" column="34" lean-forward="true" selection-start-line="328" selection-start-column="34" selection-end-line="328" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -246,6 +242,8 @@
       <find>datum</find>
       <find>odRo</find>
       <find>doRo</find>
+      <find>odR</find>
+      <find>getEdi</find>
     </findStrings>
     <replaceStrings>
       <replace>Trener</replace>
@@ -401,7 +399,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579725993485" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579730276058" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -486,7 +484,7 @@
       <workItem from="1579378129099" duration="1735000" />
       <workItem from="1579379940861" duration="8582000" />
       <workItem from="1579443478330" duration="13909000" />
-      <workItem from="1579542355040" duration="17667000" />
+      <workItem from="1579542355040" duration="20055000" />
     </task>
     <task id="LOCAL-00001" summary="added login screen, styles.ccs">
       <created>1579376731827</created>
@@ -586,17 +584,24 @@
       <option name="project" value="LOCAL" />
       <updated>1579724065445</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="od/do added as combo box">
+      <created>1579726017751</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1579726017751</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56360000" />
+    <option name="totallyTimeSpent" value="58748000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23624161" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.23624161" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -606,8 +611,8 @@
       <window_info id="Persistence" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.9275053" weight="0.04249292" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.9275053" visible="true" weight="0.08073654" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39518413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -630,7 +635,7 @@
       <window_info anchor="right" id="Database" order="8" weight="0.020134227" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13219616" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23624161" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -638,21 +643,21 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info id="Persistence" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection Results" order="0" sideWeight="0.49946696" weight="0.07583965" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.9275053" weight="0.30227518" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.3997833" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50053304" side_tool="true" weight="0.34777898" />
-      <window_info anchor="bottom" id="Java Enterprise" order="13" />
-      <window_info anchor="bottom" id="Messages" order="14" sideWeight="0.49584487" weight="0.32827735" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.9275053" visible="true" weight="0.04249292" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053304" side_tool="true" weight="0.34777898" />
+      <window_info anchor="bottom" id="Java Enterprise" order="12" />
+      <window_info anchor="bottom" id="Messages" order="13" sideWeight="0.49584487" weight="0.32827735" />
+      <window_info anchor="bottom" id="Inspection Results" order="14" sideWeight="0.49946696" weight="0.33152762" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -661,7 +666,7 @@
       <window_info anchor="right" id="Maven" order="5" weight="0.39498934" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Database" order="8" weight="0.13113007" />
+      <window_info anchor="right" id="Database" order="8" weight="0.020134227" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -682,7 +687,8 @@
     <MESSAGE value="added back button to login screen" />
     <MESSAGE value="added RozvrhovaAkce methods to App, adjusted admin.fxml with RozvrhovaAkce tab" />
     <MESSAGE value="added methods to AdminController" />
-    <option name="LAST_COMMIT_MESSAGE" value="added methods to AdminController" />
+    <MESSAGE value="od/do added as combo box" />
+    <option name="LAST_COMMIT_MESSAGE" value="od/do added as combo box" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -790,16 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/UI/LoginController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/logic/Trener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -903,16 +899,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/admin.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="250" column="45" lean-forward="true" selection-start-line="250" selection-start-column="45" selection-end-line="250" selection-end-column="45" />
+        <state relative-caret-position="224">
+          <caret line="286" column="52" lean-forward="true" selection-start-line="286" selection-start-column="52" selection-end-line="286" selection-end-column="52" />
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/UI/LoginController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/UI/AdminController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
+        <state relative-caret-position="230">
+          <caret line="328" column="34" lean-forward="true" selection-start-line="328" selection-start-column="34" selection-end-line="328" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
