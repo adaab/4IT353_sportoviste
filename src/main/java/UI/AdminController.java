@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import logic.*;
 
 import java.text.ParseException;
@@ -139,6 +140,10 @@ public class AdminController implements Observer {
     public Button predchoziTyden;
     @FXML
     public ListView seznamAkci;
+    @FXML
+    public Pane loaderPane;
+    @FXML
+    public Label loaderLabel;
 
     @Override
     public void update() {
@@ -258,6 +263,14 @@ public class AdminController implements Observer {
         alert.setContentText(text);
 
         alert.showAndWait();
+    }
+
+    public void connectionLostBegin(String text){
+
+    }
+
+    public void connectionLostEnd(){
+
     }
 
     public void novaPolozkaSportoviste() {
@@ -600,5 +613,11 @@ public class AdminController implements Observer {
     public void pristiTyden(){
         aktualniTyden--;
         update();
+    }
+
+    public void konec(){
+        if(getConfirmationPopup("zrusit")) {
+            app.close();
+        }
     }
 }

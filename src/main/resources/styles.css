@@ -22,6 +22,7 @@
     -fx-font-size: 40px;
     -fx-font-weight: bold;
     -fx-text-fill: #00205b;
+    -fx-text-alignment: center;
  }
 
 *{
@@ -39,6 +40,14 @@
 .warningLabel{
     -fx-text-fill: #e31837;
     -fx-font-size: 14px;
+}
+
+.menu{
+
+}
+
+.contentLoader{
+    -fx-position-shape: center;
 }
 
 

@@ -91,4 +91,8 @@ public class LoginController implements Observer {
             chyba.setText("Uživatel již existuje, nebo se neshodují hesla.");
         }
     }
+
+    public void konec(){
+        app.close();
+    }
 }

@@ -5,7 +5,10 @@ import UI.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -17,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 public class App implements Subject{
+    static final Logger LOG = LoggerFactory.getLogger(App.class);
+
     public ArrayList<RozvrhovaAkce> akce;
     public EntityManagerFactory EMF;
 
@@ -60,23 +65,25 @@ public class App implements Subject{
                 jeOK = heslo.equals(hashujHeslo(hesloUzivatele));
             }
         } catch (NoResultException e){
-            System.out.println(e);
+            LOG.error("User not found."+e);
             return false;
         }
 
+        LOG.info("User verification successful");
         return jeOK;
     }
 
     public void initAdminScreen() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/admin.fxml"));
-        TabPane root = loader.load();
+        AnchorPane root = loader.load();
         adminController = loader.getController();
         Scene scene = new Scene(root, 800, 640);
         stage.setScene(scene);
         stage.setTitle("Sportoviště - administrátor");
         scene.getStylesheets().add("styles.css");
         adminController.inicializuj(this);
+        LOG.info("Admin screen initialized");
     }
 
     public void initCommonScreen(){
@@ -85,9 +92,11 @@ public class App implements Subject{
 
     public boolean zaregistrujZakaznika(String email, String heslo, String hesloKontrola){
         if(!heslo.equals(hesloKontrola)){
+            LOG.error("Inputed passwords do not match.");
             return false;
         } else{
             if(existujeEmail(email)){
+                LOG.error("Inputed email already exists");
                 return false;
             } else{
                 EntityManager em = EMF.createEntityManager();
@@ -102,6 +111,7 @@ public class App implements Subject{
                 em.getTransaction().commit();
                 em.close();
 
+                LOG.info("User successfully registered");
                 return true;
             }
         }
@@ -109,13 +119,16 @@ public class App implements Subject{
 
     public boolean existujeEmail(String email){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
 
         TypedQuery<String> dotaz = em.createQuery("select email from Zakaznik where email = :email", String.class);
 
         try {
-            return (!dotaz.setParameter("email", email).getSingleResult().isEmpty());
+            boolean result = (!dotaz.setParameter("email", email).getSingleResult().isEmpty());
+            em.close();
+            return result;
         } catch (NoResultException e){
+            LOG.error("Email not found. "+e);
+            em.close();
             return false;
         }
     }
@@ -132,7 +145,7 @@ public class App implements Subject{
             }
             hesloHash = sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
         }
 
         return hesloHash;
@@ -140,24 +153,32 @@ public class App implements Subject{
 
     public List<Sportoviste> getSportoviste(){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
 
         List<Sportoviste> sportoviste = em.createQuery("select s from Sportoviste s",Sportoviste.class).getResultList();
 
+        em.close();
         return sportoviste;
     }
 
     public void noveSportoviste(String nazev, String povrch, String rozmery){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        Sportoviste novy = new Sportoviste();
-        novy.setNazev(nazev);
-        novy.setPovrch(povrch);
-        novy.setRozmery(rozmery);
+            Sportoviste novy = new Sportoviste();
+            novy.setNazev(nazev);
+            novy.setPovrch(povrch);
+            novy.setRozmery(rozmery);
 
-        em.merge(novy);
-        em.getTransaction().commit();
+            em.merge(novy);
+            em.getTransaction().commit();
+        } catch(RollbackException e){
+            LOG.error(e.toString());
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+        }
         em.close();
 
     }
@@ -331,5 +352,10 @@ public class App implements Subject{
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    public void close(){
+        EMF.close();
+        stage.close();
     }
 }
