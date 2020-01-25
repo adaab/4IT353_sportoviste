@@ -1,0 +1,14 @@
+    CONSTRAINTS
+    Sportoviště
+    Trenér - datum narození nesmí být do budoucnosti
+           - úvazky
+           - regex na mail
+    Rozvrhová akce - čas od < čas do
+                   - datum nesmí být do minulosti
+    Zákazník - regex na mail
+
+ok  SEKVENCE - číslování ID pro všechny třídy ... Done
+
+    LOGOVÁNÍ
+
+    ODCHYTÁVÁNÍ SQL EXCEPTIONS

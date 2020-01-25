@@ -1,14 +1,12 @@
 package logic;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="Sportoviste")
 public class Sportoviste {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idSportoviste")
     public Integer idSportoviste;
     @Column(name="nazev")

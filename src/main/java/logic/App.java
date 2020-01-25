@@ -19,10 +19,6 @@ import java.util.List;
 public class App implements Subject{
     public ArrayList<RozvrhovaAkce> akce;
     public EntityManagerFactory EMF;
-    private int pocetZakazniku;
-    private int pocetSportovist;
-    private int pocetTreneru;
-    private int pocetRozvrhoveAkce;
 
     private Stage stage;
     private LoginController loginController;
@@ -33,10 +29,6 @@ public class App implements Subject{
         this.stage = stage;
 
         EMF = Persistence.createEntityManagerFactory("punit");
-        getPocetZakazniku();
-        pocetSportovist = getSportoviste().size();
-        pocetTreneru = getTreneri().size();
-        pocetRozvrhoveAkce = getRozvrhoveAkce().size();
     }
 
     @Override
@@ -102,7 +94,6 @@ public class App implements Subject{
                 em.getTransaction().begin();
 
                 Zakaznik novy = new Zakaznik();
-                novy.setIdZakaznik(pocetZakazniku+1);
                 novy.setEmail(email);
                 novy.setHeslo(hashujHeslo(heslo));
                 novy.setAdmin(false);
@@ -111,7 +102,6 @@ public class App implements Subject{
                 em.getTransaction().commit();
                 em.close();
 
-                pocetZakazniku++;
                 return true;
             }
         }
@@ -148,13 +138,6 @@ public class App implements Subject{
         return hesloHash;
     }
 
-    public void getPocetZakazniku(){
-        EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
-
-        pocetZakazniku = em.createQuery("select count(idZakaznik) from Zakaznik", Long.class).getSingleResult().intValue();
-    }
-
     public List<Sportoviste> getSportoviste(){
         EntityManager em = EMF.createEntityManager();
         em.getTransaction().begin();
@@ -169,7 +152,6 @@ public class App implements Subject{
         em.getTransaction().begin();
 
         Sportoviste novy = new Sportoviste();
-        novy.setIdSportoviste(pocetSportovist+1);
         novy.setNazev(nazev);
         novy.setPovrch(povrch);
         novy.setRozmery(rozmery);
@@ -178,7 +160,6 @@ public class App implements Subject{
         em.getTransaction().commit();
         em.close();
 
-        pocetSportovist++;
     }
 
     public Sportoviste getSportovisteDetail(Integer id){
@@ -232,7 +213,6 @@ public class App implements Subject{
         em.getTransaction().begin();
 
         Trener novy = new Trener();
-        novy.setIdTrener(pocetTreneru+1);
         novy.setJmeno(jmeno);
         novy.setTelefon(telefon);
         novy.setEmail(email);
@@ -243,7 +223,6 @@ public class App implements Subject{
         em.getTransaction().commit();
         em.close();
 
-        pocetTreneru++;
     }
 
     public void updateTrener(Integer id, String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek){
@@ -299,7 +278,6 @@ public class App implements Subject{
         em.getTransaction().begin();
 
         RozvrhovaAkce novy = new RozvrhovaAkce();
-        novy.setIdRozvrhovaAkce(pocetRozvrhoveAkce+1);
         novy.setTypLekce(typLekce);
         novy.setDatum(datum);
         novy.setCasOd(casOd);
@@ -312,7 +290,6 @@ public class App implements Subject{
         em.getTransaction().commit();
         em.close();
 
-        pocetRozvrhoveAkce++;
     }
 
     public void updateRozvrhovaAkce(Integer id, String typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste){

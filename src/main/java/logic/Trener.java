@@ -1,9 +1,6 @@
 package logic;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.util.Locale;
 @Table(name="Trener")
 public class Trener {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idTrener")
     public Integer idTrener;
     @Column(name="jmeno")

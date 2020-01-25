@@ -1,9 +1,6 @@
 package logic;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -11,6 +8,7 @@ import java.util.Date;
 @Table(name="RozvrhovaAkce")
 public class RozvrhovaAkce {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idRozvrhovaAkce")
     public Integer idRozvrhovaAkce;
     @Column(name="datum")
@@ -58,8 +56,12 @@ public class RozvrhovaAkce {
         this.idRozvrhovaAkce = idRozvrhovaAkce;
     }
 
-    public Date getDatum() {
-        return datum;
+    public String getDatum() {
+        String datum2 = datum.toString().substring(0,10);
+        String dny = datum2.substring(8,10);
+        String mesic = datum2.substring(5,7);
+        String rok = datum2.substring(0,4);
+        return dny+"."+mesic+"."+rok;
     }
 
     public void setDatum(Date datum) {

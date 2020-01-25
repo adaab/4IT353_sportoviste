@@ -137,29 +137,11 @@ public class AdminController implements Observer {
     public Button nasledujiciTyden;
     @FXML
     public Button predchoziTyden;
+    @FXML
+    public ListView seznamAkci;
 
     @Override
     public void update() {
-        sportovistePole = new ArrayList<>();
-        sportovistePole.add(idSportoviste);
-        sportovistePole.add(nazevSportoviste);
-        sportovistePole.add(povrchSportoviste);
-        sportovistePole.add(rozmerySportoviste);
-
-        treneriPole = new ArrayList<>();
-        treneriPole.add(idTrener);
-        treneriPole.add(jmenoTrener);
-        treneriPole.add(telefonTrener);
-        treneriPole.add(emailTrener);
-        treneriPole.add(datumNarozeniTrener);
-        treneriPole.add(uvazekTrener);
-
-        akceComboBoxy = new ArrayList<>();
-        akceComboBoxy.add(odRozvrhovaAkce);
-        akceComboBoxy.add(doRozvrhovaAkce);
-        akceComboBoxy.add(trenerRozvrhovaAkce);
-        akceComboBoxy.add(sportovisteRozvrhovaAkce);
-
         //SPORTOVISTE TAB
         sportoviste = FXCollections.observableArrayList();
         app.getSportoviste().forEach(s -> sportoviste.add(s.getIdSportoviste()+": "+s.getNazev()));
@@ -195,10 +177,9 @@ public class AdminController implements Observer {
         novaPolozkaTrener.setDisable(false);
 
         //AKCE TAB
-        /*
         akce = FXCollections.observableArrayList();
-        app.getRozvrhoveAkce().forEach(a -> akce.add(a.getIdRozvrhovaAkce()+": "+a.getTypLekce()));
-        rozvrh.setItems(treneri);*/
+        app.getRozvrhoveAkce().forEach(a -> akce.add(a.getIdRozvrhovaAkce()+": "+a.getDatum()+" "+a.getCasOd()+"-"+a.getCasDo()+": "+a.getTypLekce()));
+        seznamAkci.setItems(akce);
 
         zobrazujuPolozkuAkce = false;
         upravujuPolozkuAkce = false;
@@ -232,6 +213,27 @@ public class AdminController implements Observer {
     public void inicializuj(App app){
         this.app = app;
         app.register(this);
+
+        sportovistePole = new ArrayList<>();
+        sportovistePole.add(idSportoviste);
+        sportovistePole.add(nazevSportoviste);
+        sportovistePole.add(povrchSportoviste);
+        sportovistePole.add(rozmerySportoviste);
+
+        treneriPole = new ArrayList<>();
+        treneriPole.add(idTrener);
+        treneriPole.add(jmenoTrener);
+        treneriPole.add(telefonTrener);
+        treneriPole.add(emailTrener);
+        treneriPole.add(datumNarozeniTrener);
+        treneriPole.add(uvazekTrener);
+
+        akceComboBoxy = new ArrayList<>();
+        akceComboBoxy.add(odRozvrhovaAkce);
+        akceComboBoxy.add(doRozvrhovaAkce);
+        akceComboBoxy.add(trenerRozvrhovaAkce);
+        akceComboBoxy.add(sportovisteRozvrhovaAkce);
+
         update();
     }
 
@@ -481,6 +483,39 @@ public class AdminController implements Observer {
         novaPolozkaTrener.setDisable(false);
 
         zobrazujuPolozkuTrener = true;
+    }
+
+    public void vyberAkci(){
+        if(upravujuPolozkuAkce || pridavamNovouPolozkuAkce){
+            if(!getConfirmationPopup("zrusit")){
+                return;
+            }
+        }
+
+        String volba = String.valueOf(seznamAkci.getSelectionModel().getSelectedItem());
+        String[] parsed = volba.split(": ");
+        Integer id = Integer.parseInt(parsed[0]);
+        aktualniAkce = app.getRozvrhoveAkceDetail(id);
+
+        akceComboBoxy.forEach(a -> a.setDisable(true));
+        typLekce.setDisable(true);
+        datumRozvrhovaAkce.setDisable(true);
+        volnaMista.setDisable(true);
+
+        idRozvrhovaAkce.setText(aktualniAkce.getIdRozvrhovaAkce().toString());
+        typLekce.setText(aktualniAkce.getTypLekce());
+        datumRozvrhovaAkce.getEditor().setText(aktualniAkce.getDatum());
+        odRozvrhovaAkce.setValue(aktualniAkce.getCasOd());
+        doRozvrhovaAkce.setValue(aktualniAkce.getCasDo());
+        volnaMista.setText(aktualniAkce.getVolnaMista().toString());
+        sportovisteRozvrhovaAkce.setValue(aktualniAkce.getIdSportoviste()+": "+app.getSportovisteDetail(aktualniAkce.getIdSportoviste()).getNazev());
+        trenerRozvrhovaAkce.setValue(aktualniAkce.getIdTrener()+": "+app.getTrenerDetail(aktualniAkce.getIdTrener()).getJmeno());
+
+        upravitRozvrh.setDisable(false);
+        smazatRozvrh.setDisable(false);
+        novaPolozkaRozvrh.setDisable(false);
+
+        zobrazujuPolozkuAkce = true;
     }
 
     public void upravSportoviste(){
