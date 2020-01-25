@@ -2,9 +2,11 @@ package logic;
 
 import UI.AdminController;
 import UI.LoginController;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.hibernate.exception.JDBCConnectionException;
@@ -16,12 +18,11 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 public class App implements Subject{
     static final Logger LOG = LoggerFactory.getLogger(App.class);
@@ -101,39 +102,56 @@ public class App implements Subject{
         } else{
             if(existujeEmail(email)){
                 LOG.error("Inputed email already exists");
+
                 return false;
             } else{
+                boolean result = false;
+
                 EntityManager em = EMF.createEntityManager();
-                em.getTransaction().begin();
 
-                Zakaznik novy = new Zakaznik();
-                novy.setEmail(email);
-                novy.setHeslo(hashujHeslo(heslo));
-                novy.setAdmin(false);
+                try {
+                    em.getTransaction().begin();
 
-                em.merge(novy);
-                em.getTransaction().commit();
-                em.close();
+                    Zakaznik novy = new Zakaznik();
+                    novy.setEmail(email);
+                    novy.setHeslo(hashujHeslo(heslo));
+                    novy.setAdmin(false);
 
-                LOG.info("User successfully registered");
-                return true;
+                    em.merge(novy);
+                    em.getTransaction().commit();
+
+                    LOG.info("User successfully registered");
+                    result = true;
+                } catch (JDBCConnectionException e){
+                    LOG.error(e.toString());
+                    //handleConnectionReset();
+                    result = false;
+                } finally {
+                    em.close();
+                    return result;
+                }
             }
         }
     }
 
     public boolean existujeEmail(String email){
+        boolean result = false;
+
         EntityManager em = EMF.createEntityManager();
 
         TypedQuery<String> dotaz = em.createQuery("select email from Zakaznik where email = :email", String.class);
 
         try {
-            boolean result = (!dotaz.setParameter("email", email).getSingleResult().isEmpty());
+            result = (!dotaz.setParameter("email", email).getSingleResult().isEmpty());
+        } catch (NoResultException e) {
+            LOG.error("Email not found. " + e.toString());
+            result = false;
+        } catch (JDBCConnectionException e){
+            LOG.error(e.toString());
+            //handleConnectionReset();
+        } finally {
             em.close();
             return result;
-        } catch (NoResultException e){
-            LOG.error("Email not found. "+e.toString());
-            em.close();
-            return false;
         }
     }
 
@@ -162,13 +180,17 @@ public class App implements Subject{
             sportoviste = em.createQuery("select s from Sportoviste s", Sportoviste.class).getResultList();
         } catch (NoResultException e) {
             LOG.error(e.toString());
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return sportoviste;
         }
     }
 
-    public void noveSportoviste(String nazev, String povrch, String rozmery){
+    public boolean noveSportoviste(String nazev, String povrch, String rozmery){
+        boolean result = false;
         EntityManager em = EMF.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -180,19 +202,20 @@ public class App implements Subject{
 
             em.merge(novy);
             em.getTransaction().commit();
+            result = true;
         } catch(RollbackException e) {
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
             em.close();
+            return result;
         }
     }
 
@@ -204,6 +227,9 @@ public class App implements Subject{
             sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id", Sportoviste.class).setParameter("id", id).getSingleResult();
         } catch (NoResultException e) {
             LOG.error(e.toString());
+        } catch (JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return sportoviste;
@@ -226,11 +252,10 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
-      } finally {
+            handleConnectionReset();
+        } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
@@ -255,6 +280,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
         */
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
@@ -270,6 +298,9 @@ public class App implements Subject{
             treneri = em.createQuery("select t from Trener t", Trener.class).getResultList();
         } catch (NoResultException e) {
             LOG.error(e.toString());
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return treneri;
@@ -295,10 +326,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
@@ -325,10 +355,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
@@ -344,6 +373,9 @@ public class App implements Subject{
             trener = em.createQuery("select t from Trener t where t.idTrener = :id", Trener.class).setParameter("id", id).getSingleResult();
         } catch (NoResultException e) {
             LOG.error(em.toString());
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return trener;
@@ -363,10 +395,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
@@ -382,6 +413,9 @@ public class App implements Subject{
             akce = em.createQuery("select a from RozvrhovaAkce a", RozvrhovaAkce.class).getResultList();
         } catch(NoResultException e){
             LOG.error(e.toString());
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return akce;
@@ -408,10 +442,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
@@ -440,10 +473,9 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -459,6 +491,9 @@ public class App implements Subject{
             akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id", RozvrhovaAkce.class).setParameter("id", id).getSingleResult();
         } catch(NoResultException e){
             LOG.error(e.toString());
+        } catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            handleConnectionReset();
         } finally {
             em.close();
             return akce;
@@ -478,16 +513,59 @@ public class App implements Subject{
             LOG.error(e.toString());
             adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
             adminController.update();
-        /*} catch(JDBCConnectionException e){
+        } catch(JDBCConnectionException e){
             LOG.error(e.toString());
-            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
-        */
+            handleConnectionReset();
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
             em.close();
         }
+    }
+
+    private void handleConnectionReset() {
+
+        adminController.communicating("Došlo ke ztrátě spojení, prosím vyčkejte.");
+
+        Task task = new Task<Void>() {
+            @Override public Void call() {
+
+                int count = 3;
+                Connection c = null;
+                while(count>0) {
+                    try {
+                        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        System.out.println("Driver found");
+                        System.out.println("Connecting...");
+                        c = DriverManager.getConnection("jdbc:sqlserver://ada.database.windows.net:1433;database=SportovisteDB", "ada", "76r0dntV");
+                    } catch (Exception e) {
+                        LOG.error("Cannot connect the database");
+                    } finally {
+                        count--;
+                        if (c != null) {
+                            try {
+                                c.close();
+                                LOG.info("Connection to database was successfully renewed");
+                                Platform.runLater(() -> {adminController.communicatingEnd();
+                                    adminController.vratChybu("Při přerušení spojení došlo ke ztrátě neuložených chyb, prosím zkuste to znovu.");
+                                    adminController.update();});
+                                return null;
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+
+                Platform.runLater(() -> adminController.vratChybu("Nepodařilo se obnovit spojení. Aplikace bude ukončena."));
+                Platform.runLater(() -> close());
+
+                return null;
+            }
+        };
+
+        new Thread(task).start();
     }
 
     public void close(){

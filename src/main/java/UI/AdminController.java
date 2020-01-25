@@ -1,7 +1,11 @@
 package UI;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -11,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 public class AdminController implements Observer {
@@ -144,6 +147,8 @@ public class AdminController implements Observer {
     public Pane loaderPane;
     @FXML
     public Label loaderLabel;
+    @FXML
+    public ProgressIndicator progressIndicator;
 
     @Override
     public void update() {
@@ -212,7 +217,6 @@ public class AdminController implements Observer {
         doRozvrhovaAkce.setItems(hodiny);
         trenerRozvrhovaAkce.setItems(treneri);
         sportovisteRozvrhovaAkce.setItems(sportoviste);
-
     }
 
     public void inicializuj(App app){
@@ -261,18 +265,19 @@ public class AdminController implements Observer {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Upozornění");
         alert.setContentText(text);
+        alert.setWidth(400);
+        alert.setHeight(300);
 
         alert.showAndWait();
     }
 
-    public void connectionLostBegin(String text){
+    public void communicating(String text){
         loaderLabel.setText(text);
         loaderPane.setVisible(true);
     }
 
-    public void connectionLostEnd(){
+    public void communicatingEnd(){
         loaderPane.setVisible(false);
-        update();
     }
 
     public void novaPolozkaSportoviste() {
@@ -358,6 +363,7 @@ public class AdminController implements Observer {
     }
 
     public void ulozitSportoviste() {
+        boolean isOK = false;
         String nazev = nazevSportoviste.getText();
         String povrch = povrchSportoviste.getText();
         String rozmery = rozmerySportoviste.getText();
@@ -366,17 +372,25 @@ public class AdminController implements Observer {
             vratChybu("Prosím, vyplňte všechna pole");
             return;
         } else if (pridavamNovouPolozkuSportoviste) {
-            app.noveSportoviste(nazev, povrch, rozmery);
+            isOK = app.noveSportoviste(nazev, povrch, rozmery);
             } else {
             app.updateSportoviste(aktualniSportoviste.getIdSportoviste(), nazev, povrch, rozmery);
         }
 
-        update();
+        if (isOK){
+            update();
+        }
     }
 
     public void ulozitTrener() {
+
         if(!datumNarozeniTrener.getText().matches("\\d{2}\\.\\d{2}\\.\\d{4}")){
             vratChybu("Prosím, vložte datum narození ve formátu dd.MM.yyyy");
+            return;
+        }
+
+        if(!emailTrener.getText().matches("\\S*@\\S*.\\.\\S*")){
+            vratChybu("Prosím, vložte email ve správném formátu x@y.z");
             return;
         }
 
@@ -395,7 +409,7 @@ public class AdminController implements Observer {
             vratChybu("Prosím, vyplňte všechna pole");
             return;
         } else if (pridavamNovouPolozkuTrener) {
-            app.novyTrener(jmeno, telefon, email, datumNarozeni, uvazek);
+            app.novyTrener(jmeno,telefon,email, datumNarozeni,uvazek);
         } else {
             app.updateTrener(aktualniTrener.getIdTrener(), jmeno, telefon, email, datumNarozeni, uvazek);
         }
@@ -404,6 +418,10 @@ public class AdminController implements Observer {
     }
 
     public void ulozitRozvrh() {
+        if(!volnaMista.getText().matches("\\d*")){
+            vratChybu("Prosím, vložte volná místa jako číslo");
+        }
+
         String lekce = typLekce.getText();
         Date datum = null;
         try {
@@ -428,9 +446,9 @@ public class AdminController implements Observer {
             vratChybu("Prosím, vyplňte všechna pole");
             return;
         } else if (pridavamNovouPolozkuAkce) {
-            app.novaRozvrhovaAkce(lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
+                app.novaRozvrhovaAkce(lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
         } else {
-            app.updateRozvrhovaAkce(aktualniAkce.getIdRozvrhovaAkce(), lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
+                app.updateRozvrhovaAkce(aktualniAkce.getIdRozvrhovaAkce(), lekce, datum, casOd, casDo, mista, idTrener, idSportoviste);
         }
 
         update();
@@ -446,6 +464,7 @@ public class AdminController implements Observer {
         String volba = String.valueOf(seznamSportoviste.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
+
         aktualniSportoviste = app.getSportovisteDetail(id);
 
         nazevSportoviste.setDisable(true);
@@ -474,6 +493,7 @@ public class AdminController implements Observer {
         String volba = String.valueOf(seznamTrener.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
+
         aktualniTrener = app.getTrenerDetail(id);
 
         jmenoTrener.setDisable(true);
@@ -510,6 +530,7 @@ public class AdminController implements Observer {
         String volba = String.valueOf(seznamAkci.getSelectionModel().getSelectedItem());
         String[] parsed = volba.split(": ");
         Integer id = Integer.parseInt(parsed[0]);
+
         aktualniAkce = app.getRozvrhoveAkceDetail(id);
 
         akceComboBoxy.forEach(a -> a.setDisable(true));
