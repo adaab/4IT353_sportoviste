@@ -266,11 +266,13 @@ public class AdminController implements Observer {
     }
 
     public void connectionLostBegin(String text){
-
+        loaderLabel.setText(text);
+        loaderPane.setVisible(true);
     }
 
     public void connectionLostEnd(){
-
+        loaderPane.setVisible(false);
+        update();
     }
 
     public void novaPolozkaSportoviste() {

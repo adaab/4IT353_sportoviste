@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.hibernate.exception.JDBCConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +15,13 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 public class App implements Subject{
     static final Logger LOG = LoggerFactory.getLogger(App.class);
@@ -65,7 +69,7 @@ public class App implements Subject{
                 jeOK = heslo.equals(hashujHeslo(hesloUzivatele));
             }
         } catch (NoResultException e){
-            LOG.error("User not found."+e);
+            LOG.error("User not found."+e.toString());
             return false;
         }
 
@@ -127,7 +131,7 @@ public class App implements Subject{
             em.close();
             return result;
         } catch (NoResultException e){
-            LOG.error("Email not found. "+e);
+            LOG.error("Email not found. "+e.toString());
             em.close();
             return false;
         }
@@ -151,13 +155,17 @@ public class App implements Subject{
         return hesloHash;
     }
 
-    public List<Sportoviste> getSportoviste(){
+    public List<Sportoviste> getSportoviste() {
         EntityManager em = EMF.createEntityManager();
-
-        List<Sportoviste> sportoviste = em.createQuery("select s from Sportoviste s",Sportoviste.class).getResultList();
-
-        em.close();
-        return sportoviste;
+        List<Sportoviste> sportoviste = null;
+        try {
+            sportoviste = em.createQuery("select s from Sportoviste s", Sportoviste.class).getResultList();
+        } catch (NoResultException e) {
+            LOG.error(e.toString());
+        } finally {
+            em.close();
+            return sportoviste;
+        }
     }
 
     public void noveSportoviste(String nazev, String povrch, String rozmery){
@@ -172,190 +180,319 @@ public class App implements Subject{
 
             em.merge(novy);
             em.getTransaction().commit();
-        } catch(RollbackException e){
+        } catch(RollbackException e) {
             LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
         } finally {
             if(em.getTransaction().isActive()){
                 em.getTransaction().rollback();
             }
+            em.close();
         }
-        em.close();
-
     }
 
-    public Sportoviste getSportovisteDetail(Integer id){
+    public Sportoviste getSportovisteDetail(Integer id) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
 
-        Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id",Sportoviste.class).setParameter("id",id).getSingleResult();
-
-        em.getTransaction().commit();
-        em.close();
-
-        return sportoviste;
+        Sportoviste sportoviste = null;
+        try {
+            sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id", Sportoviste.class).setParameter("id", id).getSingleResult();
+        } catch (NoResultException e) {
+            LOG.error(e.toString());
+        } finally {
+            em.close();
+            return sportoviste;
+        }
     }
 
     public void updateSportoviste(Integer id, String nazev, String povrch, String rozmery){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try{
+            em.getTransaction().begin();
 
-        Sportoviste upravovane = getSportovisteDetail(id);
-        upravovane.setNazev(nazev);
-        upravovane.setPovrch(povrch);
-        upravovane.setRozmery(rozmery);
+            Sportoviste upravovane = getSportovisteDetail(id);
+            upravovane.setNazev(nazev);
+            upravovane.setPovrch(povrch);
+            upravovane.setRozmery(rozmery);
 
-        em.merge(upravovane);
-        em.getTransaction().commit();
-        em.close();
+            em.merge(upravovane);
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+      } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public void removeSportoviste(Integer id){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id",Sportoviste.class).setParameter("id",id).getSingleResult();
-        em.remove(sportoviste);
+            Sportoviste sportoviste = em.createQuery("select s from Sportoviste s where s.idSportoviste = :id", Sportoviste.class).setParameter("id", id).getSingleResult();
+            em.remove(sportoviste);
 
-        em.getTransaction().commit();
-        em.close();
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
-    public List<Trener> getTreneri(){
+    public List<Trener> getTreneri() {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
-
-        List<Trener> treneri = em.createQuery("select t from Trener t",Trener.class).getResultList();
-
-        return treneri;
+        List<Trener> treneri = null;
+        try {
+            treneri = em.createQuery("select t from Trener t", Trener.class).getResultList();
+        } catch (NoResultException e) {
+            LOG.error(e.toString());
+        } finally {
+            em.close();
+            return treneri;
+        }
     }
 
     public void novyTrener(String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
 
-        Trener novy = new Trener();
-        novy.setJmeno(jmeno);
-        novy.setTelefon(telefon);
-        novy.setEmail(email);
-        novy.setDatumNarozeni(datumNarozeni);
-        novy.setUvazek(uvazek);
+        try {
+            em.getTransaction().begin();
 
-        em.merge(novy);
-        em.getTransaction().commit();
-        em.close();
+            Trener novy = new Trener();
+            novy.setJmeno(jmeno);
+            novy.setTelefon(telefon);
+            novy.setEmail(email);
+            novy.setDatumNarozeni(datumNarozeni);
+            novy.setUvazek(uvazek);
 
+            em.merge(novy);
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public void updateTrener(Integer id, String jmeno, String telefon, String email, Date datumNarozeni, Integer uvazek){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        Trener upravovany = getTrenerDetail(id);
-        upravovany.setJmeno(jmeno);
-        upravovany.setTelefon(telefon);
-        upravovany.setEmail(email);
-        upravovany.setDatumNarozeni(datumNarozeni);
-        upravovany.setUvazek(uvazek);
+            Trener upravovany = getTrenerDetail(id);
+            upravovany.setJmeno(jmeno);
+            upravovany.setTelefon(telefon);
+            upravovany.setEmail(email);
+            upravovany.setDatumNarozeni(datumNarozeni);
+            upravovany.setUvazek(uvazek);
 
-        em.merge(upravovany);
-        em.getTransaction().commit();
-        em.close();
+            em.merge(upravovany);
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
-    public Trener getTrenerDetail(Integer id){
+    public Trener getTrenerDetail(Integer id) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
-
-        Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id",Trener.class).setParameter("id",id).getSingleResult();
-
-        em.getTransaction().commit();
-        em.close();
-
-        return trener;
+        Trener trener = null;
+        try {
+            trener = em.createQuery("select t from Trener t where t.idTrener = :id", Trener.class).setParameter("id", id).getSingleResult();
+        } catch (NoResultException e) {
+            LOG.error(em.toString());
+        } finally {
+            em.close();
+            return trener;
+        }
     }
 
     public void removeTrener(Integer idTrener) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id",Trener.class).setParameter("id",idTrener).getSingleResult();
-        em.remove(trener);
+            Trener trener = em.createQuery("select t from Trener t where t.idTrener = :id", Trener.class).setParameter("id", idTrener).getSingleResult();
+            em.remove(trener);
 
-        em.getTransaction().commit();
-        em.close();
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public List<RozvrhovaAkce> getRozvrhoveAkce(){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
-
-        List<RozvrhovaAkce> akce = em.createQuery("select a from RozvrhovaAkce a",RozvrhovaAkce.class).getResultList();
-
-        return akce;
+        List<RozvrhovaAkce> akce = null;
+        try {
+            akce = em.createQuery("select a from RozvrhovaAkce a", RozvrhovaAkce.class).getResultList();
+        } catch(NoResultException e){
+            LOG.error(e.toString());
+        } finally {
+            em.close();
+            return akce;
+        }
     }
 
     public void novaRozvrhovaAkce(String typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        RozvrhovaAkce novy = new RozvrhovaAkce();
-        novy.setTypLekce(typLekce);
-        novy.setDatum(datum);
-        novy.setCasOd(casOd);
-        novy.setCasDo(casDo);
-        novy.setVolnaMista(volnaMista);
-        novy.setIdTrener(idTrener);
-        novy.setIdSportoviste(idSportoviste);
+            RozvrhovaAkce novy = new RozvrhovaAkce();
+            novy.setTypLekce(typLekce);
+            novy.setDatum(datum);
+            novy.setCasOd(casOd);
+            novy.setCasDo(casDo);
+            novy.setVolnaMista(volnaMista);
+            novy.setIdTrener(idTrener);
+            novy.setIdSportoviste(idSportoviste);
 
-        em.merge(novy);
-        em.getTransaction().commit();
-        em.close();
-
+            em.merge(novy);
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public void updateRozvrhovaAkce(Integer id, String typLekce, Date datum, String casOd, String casDo, Integer volnaMista, Integer idTrener, Integer idSportoviste){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        RozvrhovaAkce upravovany = getRozvrhoveAkceDetail(id);
-        upravovany.setTypLekce(typLekce);
-        upravovany.setDatum(datum);
-        upravovany.setCasOd(casOd);
-        upravovany.setCasDo(casDo);
-        upravovany.setVolnaMista(volnaMista);
-        upravovany.setIdTrener(idTrener);
-        upravovany.setIdSportoviste(idSportoviste);
+            RozvrhovaAkce upravovany = getRozvrhoveAkceDetail(id);
+            upravovany.setTypLekce(typLekce);
+            upravovany.setDatum(datum);
+            upravovany.setCasOd(casOd);
+            upravovany.setCasDo(casDo);
+            upravovany.setVolnaMista(volnaMista);
+            upravovany.setIdTrener(idTrener);
+            upravovany.setIdSportoviste(idSportoviste);
 
-        em.merge(upravovany);
-        em.getTransaction().commit();
-        em.close();
+            em.merge(upravovany);
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public RozvrhovaAkce getRozvrhoveAkceDetail(Integer id){
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
-
-        RozvrhovaAkce akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id",RozvrhovaAkce.class).setParameter("id",id).getSingleResult();
-
-        em.getTransaction().commit();
-        em.close();
-
-        return akce;
+        RozvrhovaAkce akce = null;
+        try {
+            akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id", RozvrhovaAkce.class).setParameter("id", id).getSingleResult();
+        } catch(NoResultException e){
+            LOG.error(e.toString());
+        } finally {
+            em.close();
+            return akce;
+        }
     }
 
     public void removeRozvrhovaAkce(Integer id) {
         EntityManager em = EMF.createEntityManager();
-        em.getTransaction().begin();
+        try {
+            em.getTransaction().begin();
 
-        RozvrhovaAkce akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id",RozvrhovaAkce.class).setParameter("id",id).getSingleResult();
-        em.remove(akce);
+            RozvrhovaAkce akce = em.createQuery("select a from RozvrhovaAkce a where a.idRozvrhovaAkce = :id", RozvrhovaAkce.class).setParameter("id", id).getSingleResult();
+            em.remove(akce);
 
-        em.getTransaction().commit();
-        em.close();
+            em.getTransaction().commit();
+        } catch(RollbackException e) {
+            LOG.error(e.toString());
+            adminController.vratChybu("Objevila se chyba při ukládání záznamu. Prosím, zkuste to znovu");
+            adminController.update();
+        /*} catch(JDBCConnectionException e){
+            LOG.error(e.toString());
+            adminController.connectionLostBegin("Objevily se potíže s připojením k databázi. Prosím vyčkejte");
+        */
+        } finally {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     public void close(){
         EMF.close();
         stage.close();
     }
+
 }
